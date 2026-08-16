@@ -1,4 +1,4 @@
-import { ArrowRight, Car, Gauge, LogOut, ShieldCheck } from 'lucide-react';
+import { Car, Gauge, LogOut, ShieldCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { TyreTrackLogo } from '../components/brand/TyreTrackLogo';
 
@@ -44,9 +44,7 @@ export default function CustomerPortalPage() {
                 <p className="mt-1 text-sm text-brand-muted">ND 452-871 • Current mileage 68,240 km</p>
               </div>
             </div>
-            <button onClick={() => navigate('/tyres/TT-2048')} className="flex items-center gap-2 text-sm font-bold text-brand-orange hover:text-brand-orange-dark">
-              View full tyre passport <ArrowRight size={16} />
-            </button>
+            <div className="rounded-xl bg-brand-canvas px-3 py-2 text-xs font-semibold text-brand-muted">4 active tyres</div>
           </div>
         </section>
 
