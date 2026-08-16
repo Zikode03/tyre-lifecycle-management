@@ -7,6 +7,7 @@ import CustomersPage from './pages/CustomersPage';
 import DashboardPage from './pages/DashboardPage';
 import GenericPage from './pages/GenericPage';
 import InspectionsPage from './pages/InspectionsPage';
+import IntegrationsPage from './pages/IntegrationsPage';
 import LifecycleCentrePage from './pages/LifecycleCentrePage';
 import LoginPage from './pages/LoginPage';
 import NotificationsPage from './pages/NotificationsPage';
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/warranty" element={<GenericPage title="Warranty management" description="Review tyre warranty coverage, evidence, claims and manufacturer decisions." />} />
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/reports" element={<ReportsPage />} />
+        <Route path="/integrations" element={<IntegrationsPage />} />
         <Route path="/settings" element={<GenericPage title="System settings" description="Manage branches, users, permissions, reminder rules and organisation preferences." />} />
       </Route>
 
