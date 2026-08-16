@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { ArrowRight, Eye, EyeOff, Gauge, LockKeyhole, Mail, ShieldCheck, Sparkles } from 'lucide-react';
+import { AlertCircle, ArrowRight, Eye, EyeOff, Gauge, LockKeyhole, Mail, ShieldCheck, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { authenticateDemoStaff, saveDemoStaffSession } from '../auth/demoAuth';
 import { LoginSuccessModal } from '../components/auth/LoginSuccessModal';
 import { TyreHeroGraphic } from '../components/brand/TyreHeroGraphic';
 import { TyreTrackLogo } from '../components/brand/TyreTrackLogo';
@@ -9,12 +10,22 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [email, setEmail] = useState('manager@tyretrack.co.za');
+  const [password, setPassword] = useState('TyreTrack@2026');
+  const [loginError, setLoginError] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoginError('');
 
-    // Frontend prototype authentication: show the branded success transition first.
-    // Replace this with the real authentication API result when the backend is connected.
+    // Frontend-only role authentication used until the ASP.NET Core identity API is connected.
+    const user = authenticateDemoStaff(email, password);
+    if (!user) {
+      setLoginError('Incorrect email address or password. Please check the demo account details.');
+      return;
+    }
+
+    saveDemoStaffSession(user);
     setShowSuccess(true);
   };
 
@@ -72,6 +83,13 @@ export default function LoginPage() {
             </div>
 
             <form className="space-y-5" onSubmit={handleSubmit}>
+              {loginError && (
+                <div className="flex gap-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700" role="alert">
+                  <AlertCircle size={18} className="mt-0.5 shrink-0" />
+                  <span>{loginError}</span>
+                </div>
+              )}
+
               <div>
                 <label htmlFor="email" className="mb-2 block text-sm font-semibold text-brand-ink">Email address</label>
                 <div className="relative">
@@ -79,8 +97,10 @@ export default function LoginPage() {
                   <input
                     id="email"
                     type="email"
-                    defaultValue="manager@tyretrack.co.za"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                     required
+                    autoComplete="email"
                     className="h-12 w-full rounded-xl border border-brand-line bg-white pl-11 pr-4 text-sm outline-none transition focus:border-brand-orange focus:ring-4 focus:ring-orange-100"
                   />
                 </div>
@@ -96,8 +116,10 @@ export default function LoginPage() {
                   <input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    defaultValue="Password123!"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                     required
+                    autoComplete="current-password"
                     className="h-12 w-full rounded-xl border border-brand-line bg-white pl-11 pr-11 text-sm outline-none transition focus:border-brand-orange focus:ring-4 focus:ring-orange-100"
                   />
                   <button
