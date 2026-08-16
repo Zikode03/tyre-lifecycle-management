@@ -6,6 +6,7 @@ import {
   ClipboardCheck,
   Gauge,
   LayoutDashboard,
+  RadioTower,
   Settings,
   ShieldCheck,
   TrendingDown,
@@ -38,6 +39,7 @@ export const navigationItems: NavigationItem[] = [
   { label: 'Warranty', path: '/warranty', icon: ShieldCheck, roles: ['system-admin', 'branch-manager'] },
   { label: 'Notifications', path: '/notifications', icon: Bell, roles: ['system-admin', 'branch-manager', 'service-advisor'] },
   { label: 'Reports', path: '/reports', icon: Activity, roles: ['system-admin', 'branch-manager'] },
+  { label: 'Integrations', path: '/integrations', icon: RadioTower, roles: ['system-admin', 'branch-manager'] },
 ];
 
 export const settingsNavigationItem: NavigationItem = {
