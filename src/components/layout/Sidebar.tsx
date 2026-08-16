@@ -1,31 +1,8 @@
-import {
-  Activity,
-  Bell,
-  CalendarDays,
-  Car,
-  ChevronLeft,
-  ChevronRight,
-  ClipboardCheck,
-  Gauge,
-  LayoutDashboard,
-  Settings,
-  ShieldCheck,
-  Users,
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { getDemoStaffSession } from '../../auth/demoAuth';
+import { getNavigationForRole, settingsNavigationItem } from '../../config/navigation';
 import { TyreTrackLogo } from '../brand/TyreTrackLogo';
-
-const navItems = [
-  { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { label: 'Customers', path: '/customers', icon: Users },
-  { label: 'Vehicles', path: '/vehicles', icon: Car },
-  { label: 'Tyres', path: '/tyres', icon: Gauge },
-  { label: 'Inspections', path: '/inspections', icon: ClipboardCheck },
-  { label: 'Bookings', path: '/bookings', icon: CalendarDays },
-  { label: 'Warranty', path: '/warranty', icon: ShieldCheck },
-  { label: 'Notifications', path: '/notifications', icon: Bell },
-  { label: 'Reports', path: '/reports', icon: Activity },
-];
 
 interface SidebarProps {
   collapsed: boolean;
@@ -33,11 +10,15 @@ interface SidebarProps {
 }
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
+  const user = getDemoStaffSession();
+  const navItems = user ? getNavigationForRole(user.role) : [];
+  const canViewSettings = user ? settingsNavigationItem.roles.includes(user.role) : false;
+  const SettingsIcon = settingsNavigationItem.icon;
+
   return (
     <aside className={`fixed inset-y-0 left-0 z-40 hidden border-r border-zinc-800 bg-brand-graphite text-white transition-all duration-300 lg:block ${collapsed ? 'w-[84px]' : 'w-[264px]'}`}>
       <div className="flex h-full flex-col">
         <div className={`flex h-20 items-center border-b border-white/10 ${collapsed ? 'justify-center px-3' : 'px-5'}`}>
-          {/* Reuse the same tyre brand mark from authentication for a consistent product identity. */}
           <TyreTrackLogo light compact={collapsed} />
         </div>
 
@@ -62,13 +43,15 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </nav>
 
         <div className="border-t border-white/10 p-3">
-          <NavLink
-            to="/settings"
-            className={({ isActive }) => `flex items-center rounded-xl px-3 py-2.5 text-sm font-medium ${isActive ? 'bg-white/10 text-white' : 'text-zinc-400 hover:bg-white/5 hover:text-white'}`}
-          >
-            <Settings size={19} />
-            {!collapsed && <span className="ml-3">Settings</span>}
-          </NavLink>
+          {canViewSettings && (
+            <NavLink
+              to={settingsNavigationItem.path}
+              className={({ isActive }) => `flex items-center rounded-xl px-3 py-2.5 text-sm font-medium ${isActive ? 'bg-white/10 text-white' : 'text-zinc-400 hover:bg-white/5 hover:text-white'}`}
+            >
+              <SettingsIcon size={19} />
+              {!collapsed && <span className="ml-3">{settingsNavigationItem.label}</span>}
+            </NavLink>
+          )}
 
           <button
             onClick={onToggle}
