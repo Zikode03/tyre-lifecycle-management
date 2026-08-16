@@ -48,19 +48,6 @@ export default function LoginPage() {
               <p className="mt-5 max-w-md text-sm leading-7 text-zinc-400 xl:text-base">
                 A professional tyre lifecycle workspace for mileage, tread health, inspections, service reminders and customer retention.
               </p>
-
-              <div className="mt-8 grid max-w-md grid-cols-3 gap-3">
-                {[
-                  ['Lifecycle', 'Full tyre history'],
-                  ['Safety', 'Tread & inspections'],
-                  ['Retention', 'Smart reminders'],
-                ].map(([title, text]) => (
-                  <div key={title} className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 backdrop-blur-sm">
-                    <p className="text-sm font-semibold">{title}</p>
-                    <p className="mt-1 text-[11px] leading-4 text-zinc-500">{text}</p>
-                  </div>
-                ))}
-              </div>
             </div>
 
             <div className="relative">
@@ -82,12 +69,6 @@ export default function LoginPage() {
           <div className="w-full max-w-md">
             <div className="mb-10 lg:hidden">
               <TyreTrackLogo />
-            </div>
-
-            <div className="mb-8">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-orange">Secure workspace</p>
-              <h2 className="mt-2 text-3xl font-black tracking-[-0.03em] text-brand-ink">Welcome back</h2>
-              <p className="mt-2 text-sm leading-6 text-brand-muted">Sign in to manage customers, vehicles, tyres and workshop activity.</p>
             </div>
 
             <form className="space-y-5" onSubmit={handleSubmit}>
