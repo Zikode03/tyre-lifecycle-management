@@ -1,12 +1,19 @@
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
+import { getDemoStaffSession } from '../../auth/demoAuth';
+import { MobileDrawer } from './MobileDrawer';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
-import { MobileDrawer } from './MobileDrawer';
 
 export function AppShell() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const user = getDemoStaffSession();
+
+  // Frontend route guard for the prototype. The backend will later enforce the same rule server-side.
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-brand-canvas">
