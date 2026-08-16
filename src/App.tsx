@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './components/layout/AppShell';
 import BookingsPage from './pages/BookingsPage';
 import CustomerAccessPage from './pages/CustomerAccessPage';
+import CustomerPortalPage from './pages/CustomerPortalPage';
 import CustomersPage from './pages/CustomersPage';
 import DashboardPage from './pages/DashboardPage';
 import GenericPage from './pages/GenericPage';
@@ -19,8 +20,9 @@ export default function App() {
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/customer-access" element={<CustomerAccessPage />} />
+      <Route path="/customer-portal" element={<CustomerPortalPage />} />
 
-      {/* Protected routes will sit behind an auth guard once the backend identity API is connected. */}
+      {/* AppShell currently provides the frontend route guard until backend identity is connected. */}
       <Route element={<AppShell />}>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/customers" element={<CustomersPage />} />
@@ -35,7 +37,7 @@ export default function App() {
         <Route path="/settings" element={<GenericPage title="System settings" description="Manage branches, users, permissions, reminder rules and organisation preferences." />} />
       </Route>
 
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 }
