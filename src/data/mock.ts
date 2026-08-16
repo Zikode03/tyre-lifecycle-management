@@ -1,4 +1,4 @@
-import type { Customer, Tyre, Vehicle } from '../types';
+import type { Customer, MileageReading, TelematicsConnection, Tyre, Vehicle } from '../types';
 
 export const customers: Customer[] = [
   { id: 'CUS-1001', name: 'Thando Mkhize', mobile: '082 451 9721', email: 'thando.mkhize@example.co.za', vehicles: 2, lastVisit: '14 Aug 2026' },
@@ -13,6 +13,28 @@ export const vehicles: Vehicle[] = [
   { id: 'VEH-2002', registration: 'ND 812-774', make: 'Volkswagen', model: 'Polo', year: 2022, customer: 'Lerato Molefe', mileage: 61580, activeTyres: 4 },
   { id: 'VEH-2003', registration: 'NU 193-442', make: 'Ford', model: 'Ranger', year: 2023, customer: 'Sibusiso Dlamini', mileage: 72930, activeTyres: 5 },
   { id: 'VEH-2004', registration: 'ND 667-220', make: 'Hyundai', model: 'Creta', year: 2025, customer: 'Priya Naidoo', mileage: 18240, activeTyres: 4 },
+];
+
+/**
+ * Frontend prototype data for the mileage ingestion model.
+ * Later these records will come from our backend, regardless of whether the source is telematics,
+ * a workshop visit, a customer update or a GPS-derived estimate.
+ */
+export const mileageReadings: MileageReading[] = [
+  { id: 'MIL-1001', vehicleId: 'VEH-2001', odometerKm: 38420, capturedAt: '16 Aug 2026, 21:18', source: 'Telematics', verification: 'Automated', provider: 'MiX Telematics', note: 'ECU/OBD odometer' },
+  { id: 'MIL-1002', vehicleId: 'VEH-2001', odometerKm: 37140, capturedAt: '14 Aug 2026, 10:42', source: 'Workshop', verification: 'Verified', note: 'Tyre inspection visit' },
+  { id: 'MIL-1003', vehicleId: 'VEH-2001', odometerKm: 34210, capturedAt: '02 Jul 2026, 08:15', source: 'Customer', verification: 'Self-reported', note: 'Customer portal update' },
+  { id: 'MIL-2001', vehicleId: 'VEH-2002', odometerKm: 61580, capturedAt: '12 Aug 2026, 14:05', source: 'Workshop', verification: 'Verified', note: 'Rotation visit' },
+  { id: 'MIL-2002', vehicleId: 'VEH-2002', odometerKm: 59840, capturedAt: '30 May 2026, 18:22', source: 'Customer', verification: 'Self-reported', note: 'Mileage reminder response' },
+  { id: 'MIL-3001', vehicleId: 'VEH-2003', odometerKm: 72930, capturedAt: '16 Aug 2026, 21:12', source: 'GPS', verification: 'Automated', provider: 'Fleet GPS', note: 'GPS distance-derived odometer' },
+  { id: 'MIL-4001', vehicleId: 'VEH-2004', odometerKm: 18240, capturedAt: '06 May 2026, 09:20', source: 'Workshop', verification: 'Verified', note: 'Fitment visit' },
+];
+
+export const telematicsConnections: TelematicsConnection[] = [
+  { id: 'INT-001', provider: 'MiX Telematics', status: 'Connected', connectedVehicles: 24, lastSync: '4 minutes ago', description: 'Automated fleet odometer and vehicle telemetry.' },
+  { id: 'INT-002', provider: 'Netstar', status: 'Not connected', connectedVehicles: 0, description: 'Vehicle tracking and mileage integration.' },
+  { id: 'INT-003', provider: 'Samsara', status: 'Not connected', connectedVehicles: 0, description: 'Fleet telematics, OBD odometer and GPS distance data.' },
+  { id: 'INT-004', provider: 'Fleet GPS Gateway', status: 'Attention', connectedVehicles: 7, lastSync: '2 hours ago', description: 'GPS-derived distance feed for selected fleet vehicles.' },
 ];
 
 export const tyres: Tyre[] = [
