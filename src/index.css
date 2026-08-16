@@ -22,6 +22,43 @@ button { cursor: pointer; }
   outline-offset: 2px;
 }
 
+/* Subtle technical grid used behind the bespoke tyre illustration on the login page. */
+.login-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent 92%);
+}
+
+/* Keeps the successful-login modal entrance short and professional. */
+@keyframes loginModalEnter {
+  from { opacity: 0; transform: translateY(14px) scale(0.975); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.login-modal-enter {
+  animation: loginModalEnter 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* The tyre only makes one controlled rotation; it is not a distracting infinite spinner. */
+@keyframes tyreLoginSpin {
+  from { transform: rotate(-16deg) scale(0.94); opacity: 0; }
+  to { transform: rotate(344deg) scale(1); opacity: 1; }
+}
+
+.tyre-login-spin {
+  transform-origin: center;
+  animation: tyreLoginSpin 700ms cubic-bezier(0.2, 0.8, 0.2, 1) 80ms both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-modal-enter,
+  .tyre-login-spin {
+    animation: none;
+  }
+}
+
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 999px; }
 ::-webkit-scrollbar-track { background: transparent; }
