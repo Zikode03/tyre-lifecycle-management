@@ -11,9 +11,9 @@ import {
   Settings,
   ShieldCheck,
   Users,
-  Wrench,
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { TyreTrackLogo } from '../brand/TyreTrackLogo';
 
 const navItems = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
@@ -36,16 +36,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside className={`fixed inset-y-0 left-0 z-40 hidden border-r border-zinc-800 bg-brand-graphite text-white transition-all duration-300 lg:block ${collapsed ? 'w-[84px]' : 'w-[264px]'}`}>
       <div className="flex h-full flex-col">
-        <div className="flex h-20 items-center border-b border-white/10 px-5">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-orange shadow-lg shadow-orange-950/20">
-            <span className="text-lg font-black tracking-tighter">TT</span>
-          </div>
-          {!collapsed && (
-            <div className="ml-3 min-w-0">
-              <p className="truncate text-sm font-bold tracking-wide">TyreTrack Pro</p>
-              <p className="truncate text-[11px] text-zinc-400">Lifecycle Management</p>
-            </div>
-          )}
+        <div className={`flex h-20 items-center border-b border-white/10 ${collapsed ? 'justify-center px-3' : 'px-5'}`}>
+          {/* Reuse the same tyre brand mark from authentication for a consistent product identity. */}
+          <TyreTrackLogo light compact={collapsed} />
         </div>
 
         <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-5">
