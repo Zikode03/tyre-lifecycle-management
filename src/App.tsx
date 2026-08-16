@@ -7,6 +7,7 @@ import CustomersPage from './pages/CustomersPage';
 import DashboardPage from './pages/DashboardPage';
 import GenericPage from './pages/GenericPage';
 import InspectionsPage from './pages/InspectionsPage';
+import LifecycleCentrePage from './pages/LifecycleCentrePage';
 import LoginPage from './pages/LoginPage';
 import NotificationsPage from './pages/NotificationsPage';
 import ReportsPage from './pages/ReportsPage';
@@ -25,6 +26,7 @@ export default function App() {
       {/* AppShell currently provides the frontend route guard until backend identity is connected. */}
       <Route element={<AppShell />}>
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/lifecycle" element={<LifecycleCentrePage />} />
         <Route path="/customers" element={<CustomersPage />} />
         <Route path="/vehicles" element={<VehiclesPage />} />
         <Route path="/tyres" element={<TyresPage />} />
