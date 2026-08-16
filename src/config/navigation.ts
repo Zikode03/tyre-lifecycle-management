@@ -48,3 +48,20 @@ export const settingsNavigationItem: NavigationItem = {
 export function getNavigationForRole(role: StaffRole) {
   return navigationItems.filter((item) => item.roles.includes(role));
 }
+
+/**
+ * Prevents users from bypassing hidden navigation by manually typing a URL.
+ * This is a frontend safeguard only; the backend must enforce permissions too.
+ */
+export function canRoleAccessPath(role: StaffRole, pathname: string) {
+  if (pathname.startsWith('/tyres/')) {
+    return allStaffRoles.includes(role);
+  }
+
+  if (pathname === settingsNavigationItem.path) {
+    return settingsNavigationItem.roles.includes(role);
+  }
+
+  const route = navigationItems.find((item) => item.path === pathname);
+  return route ? route.roles.includes(role) : pathname === '/dashboard';
+}
