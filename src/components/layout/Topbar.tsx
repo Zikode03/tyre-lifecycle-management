@@ -1,4 +1,4 @@
-import { Bell, ChevronDown, Command, LogOut, Menu, Search, Settings, UserRound } from 'lucide-react';
+import { Bell, ChevronDown, Command, LogOut, Menu, Search, Settings } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clearDemoStaffSession, getDemoStaffSession } from '../../auth/demoAuth';
@@ -15,6 +15,7 @@ const destinations = [
   { terms: ['notification','notifications','message'], path: '/notifications' },
   { terms: ['report','reports','analytics'], path: '/reports' },
   { terms: ['integration','integrations','mileage'], path: '/integrations' },
+  { terms: ['settings','configuration','rules'], path: '/settings' },
 ];
 
 export function Topbar({ onOpenMobileMenu }: TopbarProps) {
@@ -29,7 +30,10 @@ export function Topbar({ onOpenMobileMenu }: TopbarProps) {
     const value = search.trim().toLowerCase();
     if (!value) return;
     const match = destinations.find(item => item.terms.some(term => value.includes(term)));
-    navigate(match?.path ?? '/dashboard');
+    if (match) navigate(match.path);
+    else if (/^(nd|nu|np|ca|gp|fs|nw|mp|lim|ec|nc|wc)[\s-]/i.test(search.trim())) navigate('/vehicles');
+    else if (/^(ty|tyr|tyre)-?\d+/i.test(search.trim())) navigate('/tyres');
+    else navigate('/customers');
     setSearch('');
   };
 
@@ -51,7 +55,7 @@ export function Topbar({ onOpenMobileMenu }: TopbarProps) {
             <div className="hidden min-w-0 text-left sm:block sm:min-w-[118px]"><p className="truncate text-[13px] font-bold leading-4 text-brand-ink">{user?.name ?? 'TyreTrack User'}</p><p className="mt-1 truncate text-[10px] font-medium leading-3 text-zinc-400">{user?.roleLabel ?? 'Staff'}</p></div>
             <ChevronDown size={15} className="hidden text-zinc-400 transition group-hover:text-zinc-600 sm:block" />
           </button>
-          {profileOpen && <div className="absolute right-12 top-14 w-52 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/[0.08]"><button onClick={()=>{setProfileOpen(false);navigate('/settings')}} className="flex w-full items-center gap-3 px-4 py-3 text-sm font-semibold text-zinc-700 hover:bg-[#F7F6F2]"><UserRound size={16}/>Profile & account</button><button onClick={()=>{setProfileOpen(false);navigate('/settings')}} className="flex w-full items-center gap-3 border-t border-black/[0.05] px-4 py-3 text-sm font-semibold text-zinc-700 hover:bg-[#F7F6F2]"><Settings size={16}/>System settings</button></div>}
+          {profileOpen && <div className="absolute right-12 top-14 w-52 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/[0.08]"><div className="px-4 py-3"><p className="text-xs font-bold text-brand-ink">{user?.name ?? 'TyreTrack User'}</p><p className="mt-1 text-[10px] text-zinc-400">{user?.roleLabel ?? 'Staff'}</p></div><button onClick={()=>{setProfileOpen(false);navigate('/settings')}} className="flex w-full items-center gap-3 border-t border-black/[0.05] px-4 py-3 text-sm font-semibold text-zinc-700 hover:bg-[#F7F6F2]"><Settings size={16}/>System settings</button></div>}
           <button onClick={handleLogout} className="flex h-10 w-10 items-center justify-center rounded-xl text-zinc-400 transition hover:bg-red-50 hover:text-red-600" title="Sign out" aria-label="Sign out"><LogOut size={17} strokeWidth={1.9} /></button>
         </div>
       </div>
