@@ -5,24 +5,25 @@
 :root {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #18181B;
-  background: #F7F7F5;
+  background: #F2F1ED;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; min-height: 100vh; background: #F7F7F5; }
+body { margin: 0; min-width: 320px; min-height: 100vh; background: #F2F1ED; }
 button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
 
-/* Keeps keyboard navigation visible without adding heavy outlines during pointer use. */
+/* V2 keeps surfaces calm and lets typography/data carry the hierarchy. */
+::selection { background: rgba(249, 115, 22, 0.18); }
+
 :focus-visible {
-  outline: 3px solid rgba(249, 115, 22, 0.24);
+  outline: 3px solid rgba(249, 115, 22, 0.22);
   outline-offset: 2px;
 }
 
-/* Subtle technical grid used behind the bespoke tyre illustration on the login page. */
 .login-grid {
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
@@ -31,7 +32,12 @@ button { cursor: pointer; }
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent 92%);
 }
 
-/* Keeps the successful-login modal entrance short and professional. */
+/* Lightweight grain gives dark automotive surfaces depth without using imagery. */
+.surface-grain {
+  background-image: radial-gradient(rgba(255,255,255,0.045) 0.7px, transparent 0.7px);
+  background-size: 10px 10px;
+}
+
 @keyframes loginModalEnter {
   from { opacity: 0; transform: translateY(14px) scale(0.975); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -41,7 +47,6 @@ button { cursor: pointer; }
   animation: loginModalEnter 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* The tyre only makes one controlled rotation; it is not a distracting infinite spinner. */
 @keyframes tyreLoginSpin {
   from { transform: rotate(-16deg) scale(0.94); opacity: 0; }
   to { transform: rotate(344deg) scale(1); opacity: 1; }
@@ -54,11 +59,9 @@ button { cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce) {
   .login-modal-enter,
-  .tyre-login-spin {
-    animation: none;
-  }
+  .tyre-login-spin { animation: none; }
 }
 
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 999px; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-thumb { background: #c7c7c3; border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
 ::-webkit-scrollbar-track { background: transparent; }
