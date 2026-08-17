@@ -4,13 +4,18 @@ import { PageHeader } from '../components/ui/PageHeader';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { tyres } from '../data/mock';
 
+/**
+ * Tyres is the single entry point for tyre records.
+ * Selecting a row opens that tyre's passport/detail view rather than exposing
+ * the passport as a separate module in navigation.
+ */
 export default function TyresPage() {
   return (
     <div className="space-y-7">
       <PageHeader
-        eyebrow="Tyre lifecycle"
-        title="Tyre registry"
-        description="Every tyre has one digital identity, a current wheel position and a traceable lifecycle record."
+        eyebrow="Tyre management"
+        title="Tyres"
+        description="Search every registered tyre, see where it is fitted, and open its complete digital passport and lifecycle history."
         action={
           <button className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#202124] px-4 text-sm font-bold text-white shadow-sm transition hover:bg-zinc-800">
             <Plus size={16} /> Register tyre
@@ -37,8 +42,9 @@ export default function TyresPage() {
       <section className="overflow-hidden rounded-[26px] bg-white shadow-[0_1px_0_rgba(24,24,27,0.04),0_16px_36px_rgba(24,24,27,0.04)] ring-1 ring-black/[0.045]">
         <div className="flex items-center justify-between px-6 py-5">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-400">Registered inventory</p>
-            <h2 className="mt-1.5 text-lg font-black tracking-[-0.02em] text-brand-ink">Active tyre records</h2>
+            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-400">Tyre registry</p>
+            <h2 className="mt-1.5 text-lg font-black tracking-[-0.02em] text-brand-ink">Registered tyre records</h2>
+            <p className="mt-1 text-xs text-zinc-400">Select a tyre to open its digital passport.</p>
           </div>
           <div className="rounded-full bg-[#F2F1ED] px-3 py-1.5 text-[11px] font-bold text-zinc-500">{tyres.length} records</div>
         </div>
@@ -78,7 +84,9 @@ export default function TyresPage() {
               </div>
               <div className="flex items-center justify-between gap-3 md:justify-end">
                 <StatusBadge status={tyre.status} />
-                <ArrowRight size={14} className="text-zinc-300 transition group-hover:translate-x-0.5 group-hover:text-brand-orange" />
+                <div className="flex items-center gap-1 text-[11px] font-bold text-zinc-400 transition group-hover:text-brand-orange">
+                  Passport <ArrowRight size={14} className="transition group-hover:translate-x-0.5" />
+                </div>
               </div>
             </Link>
           ))}
