@@ -1,5 +1,26 @@
-import { CalendarDays, Clock3, Plus } from 'lucide-react';
+import { CalendarDays, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { PageHeader } from '../components/ui/PageHeader';
 
-const bookings=[['08:30','Thando Mkhize','ND 452-981','Tyre inspection','Checked in'],['09:15','Lerato Molefe','ND 812-774','Rotation & balancing','Confirmed'],['10:30','Sibusiso Dlamini','NU 193-442','Replacement assessment','Confirmed'],['11:45','Priya Naidoo','ND 667-220','Alignment check','Pending']];
-export default function BookingsPage(){return <div className="space-y-6"><PageHeader eyebrow="Workshop schedule" title="Bookings" description="Manage customer appointments and tyre-service visits." action={<button className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-orange px-4 text-sm font-bold text-white"><Plus size={17}/>New booking</button>}/><div className="grid gap-4 lg:grid-cols-[1fr_320px]"><div className="rounded-2xl border border-brand-line bg-white shadow-soft"><div className="flex items-center justify-between border-b border-brand-line p-5"><div><h2 className="font-bold">Sunday, 16 August 2026</h2><p className="mt-1 text-xs text-brand-muted">18 bookings scheduled</p></div><CalendarDays className="text-brand-orange" size={20}/></div><div className="divide-y divide-brand-line">{bookings.map(([time,name,reg,service,status])=><div key={time} className="flex gap-4 p-5"><div className="w-14 shrink-0 text-sm font-bold text-brand-orange">{time}</div><div className="min-w-0 flex-1"><div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-semibold">{name}</p><p className="mt-1 text-xs text-brand-muted">{reg} · {service}</p></div><span className="w-fit rounded-full bg-brand-canvas px-2.5 py-1 text-xs font-semibold text-brand-muted">{status}</span></div></div></div>)}</div></div><aside className="rounded-2xl border border-brand-line bg-brand-graphite p-5 text-white shadow-soft"><Clock3 size={22} className="text-brand-orange"/><h3 className="mt-4 text-lg font-bold">Today’s capacity</h3><p className="mt-2 text-sm leading-6 text-zinc-400">Workshop is currently at 72% booked capacity.</p><div className="mt-6 h-2 overflow-hidden rounded-full bg-white/10"><div className="h-full w-[72%] rounded-full bg-brand-orange"/></div><div className="mt-6 grid grid-cols-2 gap-3"><div className="rounded-xl bg-white/5 p-3"><p className="text-2xl font-bold">18</p><p className="text-xs text-zinc-500">Booked</p></div><div className="rounded-xl bg-white/5 p-3"><p className="text-2xl font-bold">7</p><p className="text-xs text-zinc-500">Open slots</p></div></div></aside></div></div>}
+const bookings=[['08:30','Thando Mkhize','ND 452-981','Tyre inspection','Checked in'],['09:15','Lerato Molefe','ND 812-774','Rotation & balancing','Confirmed'],['10:30','Sibusiso Dlamini','NU 193-442','Replacement assessment','Confirmed'],['11:45','Priya Naidoo','ND 667-220','Alignment check','Pending'],['13:00','Ayanda Zulu','ND 931-556','Puncture assessment','Confirmed']];
+
+export default function BookingsPage(){
+  return <div className="space-y-7">
+    <PageHeader eyebrow="Workshop schedule" title="Bookings" description="Plan tyre-service visits and manage the workshop day without duplicating dashboard statistics." action={<button className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#202124] px-4 text-sm font-bold text-white"><Plus size={16}/>New booking</button>}/>
+
+    <section className="overflow-hidden rounded-[26px] bg-white ring-1 ring-black/[0.045]">
+      <div className="flex flex-col gap-4 border-b border-black/[0.05] p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50 text-brand-orange"><CalendarDays size={18}/></div><div><h2 className="text-base font-black text-brand-ink">Sunday, 16 August 2026</h2><p className="mt-1 text-xs text-zinc-400">Workshop appointment schedule</p></div></div>
+        <div className="flex items-center gap-1"><button className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F5F4F0] text-zinc-500"><ChevronLeft size={15}/></button><button className="h-9 rounded-lg bg-[#F5F4F0] px-3 text-xs font-bold text-zinc-600">Today</button><button className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F5F4F0] text-zinc-500"><ChevronRight size={15}/></button></div>
+      </div>
+
+      <div className="grid lg:grid-cols-[110px_1fr]">
+        <div className="hidden border-r border-black/[0.05] bg-[#FAF9F6] lg:block">
+          {['08:00','09:00','10:00','11:00','12:00','13:00','14:00'].map(time=><div key={time} className="h-20 border-b border-black/[0.04] px-4 pt-3 text-[11px] font-bold text-zinc-400">{time}</div>)}
+        </div>
+        <div className="divide-y divide-black/[0.045]">
+          {bookings.map(([time,name,reg,service,status])=><button key={`${time}-${reg}`} className="flex w-full flex-col gap-3 p-5 text-left transition hover:bg-[#FBFAF7] sm:flex-row sm:items-center sm:justify-between"><div className="flex min-w-0 gap-4"><div className="w-14 shrink-0 text-sm font-black text-brand-orange">{time}</div><div><p className="text-sm font-black text-brand-ink">{name}</p><p className="mt-1 text-xs text-zinc-500">{reg} · {service}</p></div></div><span className={`w-fit rounded-full px-2.5 py-1 text-[10px] font-black ${status==='Checked in'?'bg-emerald-50 text-emerald-700':status==='Pending'?'bg-amber-50 text-amber-700':'bg-zinc-100 text-zinc-600'}`}>{status}</span></button>)}
+        </div>
+      </div>
+    </section>
+  </div>
+}
