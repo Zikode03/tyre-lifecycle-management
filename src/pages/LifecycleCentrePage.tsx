@@ -1,7 +1,6 @@
-import { ArrowRight, Filter, Search, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Check, Filter, Search, ShieldCheck, TriangleAlert } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PageHeader } from '../components/ui/PageHeader';
-import { TyreScanVisual } from '../components/visuals/AutomotiveVisuals';
 
 const healthCases = [
   { id:'TY-1003', customer:'Sibusiso Dlamini', vehicle:'2020 VW Polo • ND 186-442', tread:'2.1 mm', evidence:'Measured 14 Aug 2026', confidence:'High', action:'Replacement inspection', reason:'Low measured tread and uneven shoulder wear', tone:'Critical' },
@@ -10,15 +9,56 @@ const healthCases = [
   { id:'TY-1008', customer:'Ayanda Zulu', vehicle:'2023 Toyota Hilux • ND 931-556', tread:'5.6 mm', evidence:'Measured 12 Aug 2026', confidence:'High', action:'Rotation check', reason:'Mileage interval reached since last rotation', tone:'Rotation' },
 ];
 
+function TreadTyre({ worn = false }: { worn?: boolean }) {
+  const grooves = worn ? [25, 48, 71] : [16, 31, 46, 61, 76];
+  return (
+    <div className={`relative h-[118px] w-[74px] shrink-0 rounded-[44%] border-[8px] shadow-[inset_8px_0_14px_rgba(255,255,255,.06),inset_-8px_0_14px_rgba(0,0,0,.5)] ${worn ? 'border-[#4a3936] bg-[#211b1a]' : 'border-zinc-600 bg-[#171719]'}`} aria-hidden="true">
+      <div className={`absolute inset-[27%] rounded-full border-[5px] ${worn ? 'border-red-400/35 bg-[#2a2020]' : 'border-emerald-400/35 bg-[#232729]'}`} />
+      {grooves.map((top) => <span key={top} className={`absolute left-[7%] right-[7%] rounded-full ${worn ? 'h-[3px] bg-red-300/25' : 'h-[5px] bg-zinc-400/45'}`} style={{ top: `${top}%` }} />)}
+      {!worn && [28, 52, 74].map((left) => <span key={left} className="absolute bottom-[7%] top-[7%] w-[3px] rotate-6 rounded-full bg-zinc-500/30" style={{ left: `${left}%` }} />)}
+      {worn && <span className="absolute -right-1 bottom-[18%] h-10 w-2 rotate-12 rounded-full bg-red-500/30 blur-[2px]" />}
+    </div>
+  );
+}
+
 export default function LifecycleCentrePage(){
   return <div className="space-y-7">
     <PageHeader eyebrow="Tyre intelligence" title="Tyre Health Centre" description="A working queue for tyres that need attention, with evidence quality and next action shown clearly." />
 
-    <section className="relative overflow-hidden rounded-[26px] bg-[#202124] px-5 py-5 text-white sm:px-6">
-      <div className="absolute -right-10 -top-16 h-44 w-44 rounded-full border-[28px] border-white/[0.025]"/>
-      <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-5"><TyreScanVisual/><div><p className="text-[10px] font-bold uppercase tracking-[0.16em] text-orange-300">Digital tread intelligence</p><h2 className="mt-1 text-xl font-black tracking-tight">Review the tyre, not just the alert.</h2><p className="mt-2 max-w-2xl text-xs leading-5 text-zinc-400">The visual language separates physical tread evidence from estimated wear. Staff should inspect uncertain cases before confirming replacement advice.</p></div></div>
-        <Link to="/inspections" className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-white/10 px-4 text-xs font-bold text-white ring-1 ring-white/10 hover:bg-white/15">Open inspections <ArrowRight size={14}/></Link>
+    <section className="relative overflow-hidden rounded-[26px] bg-[#1c1d1f] text-white ring-1 ring-white/[0.04]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(16,185,129,.10),transparent_25%),radial-gradient(circle_at_83%_75%,rgba(239,68,68,.10),transparent_28%)]" />
+      <div className="absolute inset-0 opacity-30 surface-grain" />
+      <div className="relative grid min-h-[245px] lg:grid-cols-[1fr_1.05fr]">
+        <div className="flex flex-col justify-center px-5 py-7 sm:px-7 lg:px-8">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">Digital tread intelligence</p>
+          <h2 className="mt-2 max-w-xl text-2xl font-extrabold tracking-[-0.025em] sm:text-[28px]">See the difference before it becomes a problem.</h2>
+          <p className="mt-3 max-w-xl text-sm leading-6 text-zinc-400">Tyre health combines verified tread measurements, wear patterns and mileage evidence so staff can separate healthy tyres from tyres that need action.</p>
+          <Link to="/inspections" className="mt-5 inline-flex h-10 w-fit items-center justify-center gap-2 rounded-xl bg-white px-4 text-xs font-bold text-[#202124] transition hover:bg-zinc-100">Open inspections <ArrowRight size={14}/></Link>
+        </div>
+
+        <div className="relative grid border-t border-white/[0.07] sm:grid-cols-2 lg:border-l lg:border-t-0">
+          <div className="relative flex min-h-[220px] items-center gap-4 overflow-hidden border-b border-white/[0.07] px-5 py-6 sm:border-b-0 sm:border-r sm:px-6">
+            <div className="absolute -left-10 -top-12 h-40 w-40 rounded-full bg-emerald-400/[0.06] blur-2xl" />
+            <TreadTyre />
+            <div className="relative min-w-0">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-300 ring-1 ring-emerald-400/20"><Check size={11}/> Healthy</div>
+              <p className="mt-3 text-2xl font-extrabold tracking-tight text-white">5.8 mm</p>
+              <p className="mt-1 text-xs font-semibold text-zinc-300">Deep, even tread</p>
+              <p className="mt-2 max-w-[150px] text-[11px] leading-4 text-zinc-500">Verified reading. No immediate tyre action required.</p>
+            </div>
+          </div>
+
+          <div className="relative flex min-h-[220px] items-center gap-4 overflow-hidden px-5 py-6 sm:px-6">
+            <div className="absolute -right-8 bottom-0 h-40 w-40 rounded-full bg-red-500/[0.07] blur-2xl" />
+            <TreadTyre worn />
+            <div className="relative min-w-0">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-red-400/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-red-300 ring-1 ring-red-400/20"><TriangleAlert size={11}/> Critical</div>
+              <p className="mt-3 text-2xl font-extrabold tracking-tight text-white">2.1 mm</p>
+              <p className="mt-1 text-xs font-semibold text-zinc-300">Low, uneven tread</p>
+              <p className="mt-2 max-w-[150px] text-[11px] leading-4 text-zinc-500">Measured wear is near the replacement threshold. Inspect now.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
