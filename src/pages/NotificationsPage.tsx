@@ -1,5 +1,61 @@
-import { Search, Send, TriangleAlert } from 'lucide-react';
+import { BellRing, CalendarClock, CheckCircle2, Clock3, Search, ShieldCheck, TriangleAlert } from 'lucide-react';
 import { PageHeader } from '../components/ui/PageHeader';
-const messages=[['Thando Mkhize','Tread recheck recommended','WhatsApp','Due now','High'],['Lerato Molefe','Rotation due in 500 km','SMS','Today 19:30','Normal'],['Sibusiso Dlamini','Urgent replacement assessment','WhatsApp','Due now','Critical'],['Priya Naidoo','Mileage update requested','SMS','Tomorrow','Normal']];
-export default function NotificationsPage(){return <div className="space-y-7"><PageHeader eyebrow="Customer communication" title="Notifications" description="Manage tyre reminders, safety messages and customer follow-up from one communication queue."/>
-<section className="grid min-h-[560px] overflow-hidden rounded-[26px] bg-white ring-1 ring-black/[0.045] lg:grid-cols-[360px_1fr]"><div className="border-b border-black/[0.05] lg:border-b-0 lg:border-r"><div className="border-b border-black/[0.05] p-4"><div className="relative"><Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400"/><input placeholder="Search customer or message" className="h-11 w-full rounded-xl bg-[#F5F4F0] pl-10 pr-4 text-sm outline-none focus:bg-white focus:ring-2 focus:ring-orange-100"/></div></div><div className="divide-y divide-black/[0.045]">{messages.map(([name,subject,channel,due,priority],index)=><button key={`${name}-${subject}`} className={`w-full p-4 text-left transition hover:bg-[#FBFAF7] ${index===0?'bg-orange-50/40':''}`}><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-brand-ink">{name}</p><p className="mt-1 text-xs text-zinc-500">{subject}</p></div>{priority==='Critical'&&<TriangleAlert size={15} className="shrink-0 text-red-500"/>}</div><div className="mt-3 flex items-center justify-between text-[10px] font-bold"><span className="text-zinc-400">{channel}</span><span className={due==='Due now'?'text-brand-orange':'text-zinc-400'}>{due}</span></div></button>)}</div></div><div className="flex flex-col"><div className="border-b border-black/[0.05] px-5 py-5 sm:px-6"><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-zinc-400">Selected communication</p><h2 className="mt-2 text-xl font-black text-brand-ink">Thando Mkhize</h2><p className="mt-1 text-sm text-zinc-500">Tread recheck recommended · WhatsApp</p></div><div className="flex-1 p-5 sm:p-6"><div className="max-w-2xl rounded-[22px] bg-[#F5F4F0] p-5"><p className="text-sm leading-7 text-zinc-700">Hi Thando, your latest tyre inspection recommends a tread recheck. Please book a short tyre-health inspection so the workshop can confirm the current condition before further advice is given.</p></div><div className="mt-6 grid gap-4 sm:grid-cols-3"><div><p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Reason</p><p className="mt-1 text-sm font-bold text-brand-ink">Tread recheck</p></div><div><p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Due</p><p className="mt-1 text-sm font-bold text-brand-orange">Now</p></div><div><p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Linked vehicle</p><p className="mt-1 text-sm font-bold text-brand-ink">ND 452-981</p></div></div></div><div className="flex justify-end gap-2 border-t border-black/[0.05] p-4"><button className="h-10 rounded-xl bg-[#F5F4F0] px-4 text-xs font-bold text-zinc-600">Mark complete</button><button className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#202124] px-4 text-xs font-bold text-white"><Send size={14}/>Send message</button></div></div></section></div>}
+import { decideNotification, type NotificationReason } from '../lib/notificationEngine';
+
+const now = new Date('2026-08-17T12:24:00+02:00');
+
+const notificationSources = [
+  { id:'NTF-1001', name:'Sibusiso Dlamini', subject:'Urgent replacement assessment', channel:'WhatsApp', reason:'TYRE_CRITICAL' as NotificationReason, vehicle:'NU 193-442', tyre:'Rear right', sendCount:1, lastSentAt:'2026-08-17T08:15:00+02:00', message:'Your rear-right tyre has a verified critical condition. Please book an inspection before further operation.' },
+  { id:'NTF-1002', name:'Thando Mkhize', subject:'Tread recheck recommended', channel:'WhatsApp', reason:'TYRE_ATTENTION' as NotificationReason, vehicle:'ND 452-981', tyre:'Front right', sendCount:1, lastSentAt:'2026-08-14T09:00:00+02:00', message:'Your latest tyre assessment recommends a tread recheck. TyreTrack will remind you again only if no action is taken after the reminder interval.' },
+  { id:'NTF-1003', name:'Lerato Molefe', subject:'Rotation reminder', channel:'SMS', reason:'ROTATION_DUE' as NotificationReason, vehicle:'ND 812-774', tyre:'Front axle', sendCount:0, scheduledFor:'2026-08-17T19:30:00+02:00', message:'Your tyre rotation interval has been reached. A short rotation and balancing visit is recommended.' },
+  { id:'NTF-1004', name:'Priya Naidoo', subject:'Mileage update request', channel:'SMS', reason:'MILEAGE_REQUEST' as NotificationReason, vehicle:'ND 667-220', tyre:'Vehicle mileage', sendCount:2, lastSentAt:'2026-08-10T09:00:00+02:00', message:'Please update your current odometer reading so TyreTrack can keep tyre-health estimates current.' },
+  { id:'NTF-1005', name:'Ayanda Zulu', subject:'Inspection booked', channel:'WhatsApp', reason:'TYRE_ATTENTION' as NotificationReason, vehicle:'ND 931-556', tyre:'Front left', sendCount:1, customerHasActed:true, message:'Customer has already booked an inspection. Automated follow-up is paused.' },
+  { id:'NTF-1006', name:'Thando Mkhize', subject:'Replacement completed', channel:'WhatsApp', reason:'TYRE_CRITICAL' as NotificationReason, vehicle:'ND 452-981', tyre:'Rear right', sendCount:1, issueResolved:true, message:'The linked tyre issue has been resolved. No more reminders will be sent.' },
+];
+
+const notifications = notificationSources.map(item => ({ ...item, decision: decideNotification(item, now) }));
+
+function stateTone(state:string){
+  if(state==='Sent') return 'bg-emerald-50 text-emerald-700';
+  if(state==='Scheduled') return 'bg-blue-50 text-blue-700';
+  if(state==='Suppressed') return 'bg-zinc-100 text-zinc-600';
+  if(state==='Waiting for customer') return 'bg-amber-50 text-amber-700';
+  return 'bg-emerald-50 text-emerald-700';
+}
+
+export default function NotificationsPage(){
+  const selected = notifications[0];
+  return <div className="space-y-6">
+    <PageHeader eyebrow="Customer communication" title="Notifications" description="Monitor automated tyre reminders, scheduled messages and cases that actually need staff attention."/>
+
+    <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      {[
+        ['Automatic sends', notifications.filter(n=>n.decision.shouldSendNow).length, BellRing, 'Eligible now'],
+        ['Scheduled', notifications.filter(n=>n.decision.state==='Scheduled').length, CalendarClock, 'Queued for later'],
+        ['Suppressed', notifications.filter(n=>n.decision.state==='Suppressed').length, ShieldCheck, 'Spam prevented'],
+        ['Customer acted', notifications.filter(n=>n.decision.state==='Waiting for customer'||n.decision.state==='Resolved').length, CheckCircle2, 'No reminder needed'],
+      ].map(([label,value,Icon,note])=>{const I=Icon as typeof BellRing;return <div key={String(label)} className="flex items-center gap-3 rounded-[18px] bg-white px-4 py-4 ring-1 ring-black/[0.045]"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F3F2EE] text-zinc-700"><I size={18}/></div><div className="min-w-0"><div className="flex items-baseline gap-2"><p className="text-xl font-extrabold text-brand-ink">{String(value)}</p><p className="text-sm font-semibold text-zinc-600">{String(label)}</p></div><p className="mt-0.5 text-xs text-zinc-400">{String(note)}</p></div></div>})}
+    </section>
+
+    <section className="grid min-h-[590px] overflow-hidden rounded-[26px] bg-white ring-1 ring-black/[0.045] lg:grid-cols-[390px_1fr]">
+      <div className="border-b border-black/[0.05] lg:border-b-0 lg:border-r">
+        <div className="border-b border-black/[0.05] p-4"><div className="relative"><Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400"/><input placeholder="Search customer, vehicle or reminder" className="h-11 w-full rounded-xl bg-[#F5F4F0] pl-10 pr-4 text-sm outline-none focus:bg-white focus:ring-2 focus:ring-orange-100"/></div></div>
+        <div className="divide-y divide-black/[0.045]">{notifications.map((item,index)=><button key={item.id} className={`w-full p-4 text-left transition hover:bg-[#FBFAF7] ${index===0?'bg-orange-50/35':''}`}><div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="truncate text-sm font-extrabold text-brand-ink">{item.name}</p><p className="mt-1 truncate text-xs text-zinc-500">{item.subject}</p></div>{item.decision.priority==='Urgent'&&<TriangleAlert size={15} className="shrink-0 text-red-500"/>}</div><div className="mt-3 flex items-center justify-between gap-3"><span className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${stateTone(item.decision.state)}`}>{item.decision.state}</span><span className="text-[10px] font-semibold text-zinc-400">{item.channel}</span></div></button>)}</div>
+      </div>
+
+      <div className="flex flex-col">
+        <div className="border-b border-black/[0.05] px-5 py-5 sm:px-6"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-zinc-400">Automation decision</p><h2 className="mt-2 text-xl font-extrabold text-brand-ink">{selected.name}</h2><p className="mt-1 text-sm text-zinc-500">{selected.subject} · {selected.channel}</p></div><span className={`w-fit rounded-full px-3 py-1.5 text-xs font-bold ${stateTone(selected.decision.state)}`}>{selected.decision.state}</span></div></div>
+
+        <div className="flex-1 p-5 sm:p-6">
+          <div className="max-w-3xl rounded-[22px] bg-[#F5F4F0] p-5"><p className="text-sm leading-7 text-zinc-700">{selected.message}</p></div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {[['Priority',selected.decision.priority],['Linked vehicle',selected.vehicle],['Tyre / reason',selected.tyre],['Automatic sends',String(selected.sendCount)]].map(([label,value])=><div key={label}><p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{label}</p><p className="mt-1 text-sm font-bold text-brand-ink">{value}</p></div>)}
+          </div>
+          <div className="mt-7 rounded-[20px] border border-black/[0.05] p-5"><div className="flex items-start gap-3"><div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-brand-orange"><Clock3 size={16}/></div><div><p className="text-sm font-extrabold text-brand-ink">Why TyreTrack made this decision</p><p className="mt-2 text-xs leading-6 text-zinc-500">{selected.decision.explanation}</p>{selected.decision.nextEligibleSend&&<p className="mt-2 text-xs font-semibold text-zinc-600">Next eligible automatic send: {new Date(selected.decision.nextEligibleSend).toLocaleString('en-ZA',{dateStyle:'medium',timeStyle:'short'})}</p>}</div></div></div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-black/[0.05] p-4"><p className="text-xs text-zinc-400">Routine reminders are automatic. Staff intervene only when escalation or a custom response is needed.</p><button className="h-10 rounded-xl bg-[#202124] px-4 text-xs font-bold text-white">Manual follow-up</button></div>
+      </div>
+    </section>
+  </div>
+}
