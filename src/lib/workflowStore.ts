@@ -1,6 +1,6 @@
 export type DemoCustomer = { id:string; name:string; mobile:string; email:string; status:'Active'|'Inactive' };
 export type DemoVehicle = { id:string; customerId:string; registration:string; make:string; model:string; year:number; mileage:number; status:'Active'|'Inactive' };
-export type DemoBooking = { id:string; customer:string; registration:string; service:string; date:string; time:string; status:'Confirmed'|'Checked in'|'Pending'|'Cancelled'|'Completed' };
+export type DemoBooking = { id:string; bookingNumber?:number; customer:string; registration:string; service:string; date:string; time:string; status:'Confirmed'|'Checked in'|'Pending'|'Cancelled'|'Completed' };
 export type DemoInspection = { id:string; registration:string; customer:string; technician:string; status:'Booked'|'In progress'|'Awaiting technician'|'Completed'; odometer?:number; position?:string; inner?:number; centre?:number; outer?:number; pressure?:number; wearPattern?:string; defects?:string[]; notes?:string; recommendation?:string };
 export type DemoWarrantyClaim = { id:string; tyreId:string; issue:string; type:string; status:string; eligibility:string; supplier:string; notes?:string };
 
@@ -23,9 +23,9 @@ const seedVehicles:DemoVehicle[]=[
   {id:'VEH-2004',customerId:'CUS-1004',registration:'ND 667-220',make:'Hyundai',model:'Creta',year:2022,mileage:55210,status:'Active'},
 ];
 const seedBookings:DemoBooking[]=[
-  {id:'BKG-3001',customer:'Thando Mkhize',registration:'ND 452-981',service:'Tyre inspection',date:'2026-08-17',time:'08:30',status:'Checked in'},
-  {id:'BKG-3002',customer:'Lerato Molefe',registration:'ND 812-774',service:'Rotation & balancing',date:'2026-08-17',time:'09:15',status:'Confirmed'},
-  {id:'BKG-3003',customer:'Sibusiso Dlamini',registration:'NU 193-442',service:'Replacement assessment',date:'2026-08-17',time:'10:30',status:'Confirmed'},
+  {id:'BKG-3001',bookingNumber:1,customer:'Thando Mkhize',registration:'ND 452-981',service:'Tyre inspection',date:'2026-08-17',time:'08:30',status:'Checked in'},
+  {id:'BKG-3002',bookingNumber:2,customer:'Lerato Molefe',registration:'ND 812-774',service:'Rotation & balancing',date:'2026-08-17',time:'09:15',status:'Confirmed'},
+  {id:'BKG-3003',bookingNumber:3,customer:'Sibusiso Dlamini',registration:'NU 193-442',service:'Replacement assessment',date:'2026-08-17',time:'10:30',status:'Confirmed'},
 ];
 const seedInspections:DemoInspection[]=[
   {id:'INS-1048',registration:'ND 452-981',customer:'Thando Mkhize',technician:'S. Dlamini',status:'In progress'},
@@ -45,6 +45,14 @@ function read<T>(key:string, seed:T):T{
   try{return JSON.parse(value) as T;}catch{return seed;}
 }
 function write<T>(key:string,value:T){ if(typeof window!=='undefined') window.localStorage.setItem(key,JSON.stringify(value)); return value; }
+
+export function getNextBookingNumber(bookings:DemoBooking[],date:string){
+  const used=bookings.filter(item=>item.date===date).map(item=>item.bookingNumber??0);
+  return Math.max(0,...used)+1;
+}
+export function formatBookingNumber(booking:DemoBooking){
+  return `#${String(booking.bookingNumber??1).padStart(2,'0')}`;
+}
 
 export const workflowStore={
   customers:()=>read(CUSTOMER_KEY,seedCustomers),
