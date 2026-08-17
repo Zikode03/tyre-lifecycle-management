@@ -44,7 +44,7 @@ export default function LifecycleCentrePage(){
         </div>
 
         <div className="group relative min-h-[370px] overflow-hidden border-t border-red-500/75 lg:min-h-[420px] lg:border-l-2 lg:border-t-0">
-          <img src="https://unsplash.com/photos/CNFac-rBTag/download?force=true&w=1400" alt="Critically worn tyre with low tread" className="absolute inset-0 h-full w-full object-cover object-center transition duration-700 group-hover:scale-[1.02]" />
+          <img src="https://t.ctcdn.com.br/OuVdxIgNTOw9L_tfWacM-6zR0nU%3D/600x600/smart/i613257.jpeg" alt="Critically worn bald tyre with almost no usable tread" className="absolute inset-0 h-full w-full object-cover object-center transition duration-700 group-hover:scale-[1.02]" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#180707]/96 via-black/10 to-black/20" />
           <div className="absolute inset-0 bg-red-500/[0.025]" />
           <div className="absolute left-6 top-6 inline-flex items-center gap-2 rounded-xl bg-red-950/70 px-4 py-2.5 text-xs font-bold uppercase tracking-[0.13em] text-red-100 ring-1 ring-red-400/30 backdrop-blur-md"><TriangleAlert size={15} className="text-red-400"/> Critical</div>
