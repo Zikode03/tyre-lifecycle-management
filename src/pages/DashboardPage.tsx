@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   Activity,
   ArrowRight,
@@ -24,9 +25,47 @@ const summaryItems = [
   { label: 'Customers', value: '842', note: '24 new this month', icon: Users, tone: 'bg-emerald-50 text-emerald-700' },
 ];
 
+const headlineBefore = 'Keep every tyre ';
+const headlineAccent = 'ahead';
+const headlineAfter = ' of the next problem.';
+const headline = `${headlineBefore}${headlineAccent}${headlineAfter}`;
+
 export default function DashboardPage() {
   const user = getDemoStaffSession();
   const priorityTyres = tyres.filter((tyre) => tyre.status !== 'Good').slice(0, 4);
+  const [typedCharacters, setTypedCharacters] = useState(0);
+  const [typingComplete, setTypingComplete] = useState(false);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) {
+      setTypedCharacters(headline.length);
+      setTypingComplete(true);
+      return;
+    }
+
+    // A short pause lets the dashboard settle after login before the headline begins.
+    const startDelay = window.setTimeout(() => {
+      const typingTimer = window.setInterval(() => {
+        setTypedCharacters((current) => {
+          const next = Math.min(current + 1, headline.length);
+          if (next === headline.length) {
+            window.clearInterval(typingTimer);
+            setTypingComplete(true);
+          }
+          return next;
+        });
+      }, 42);
+    }, 280);
+
+    return () => window.clearTimeout(startDelay);
+  }, []);
+
+  const beforeText = headlineBefore.slice(0, Math.min(typedCharacters, headlineBefore.length));
+  const accentCount = Math.max(0, typedCharacters - headlineBefore.length);
+  const accentText = headlineAccent.slice(0, Math.min(accentCount, headlineAccent.length));
+  const afterCount = Math.max(0, typedCharacters - headlineBefore.length - headlineAccent.length);
+  const afterText = headlineAfter.slice(0, Math.min(afterCount, headlineAfter.length));
 
   return (
     <div className="mx-auto w-full max-w-[1500px] space-y-5 sm:space-y-6">
@@ -50,9 +89,22 @@ export default function DashboardPage() {
               <span className="text-xs font-medium text-zinc-200/85">Monday operations</span>
             </div>
 
-            <h1 className="mt-5 max-w-2xl text-[32px] font-extrabold leading-[1.06] tracking-[-0.04em] text-white sm:text-[40px] lg:text-[44px]">
-              Keep every tyre <span className="text-brand-orange">ahead</span> of the next problem.
+            {/* Invisible copy reserves the final wrapping/height so typing never shifts the hero content. */}
+            <h1
+              className="relative mt-5 max-w-2xl text-[32px] font-extrabold leading-[1.06] tracking-[-0.04em] text-white sm:text-[40px] lg:text-[44px]"
+              aria-label={headline}
+            >
+              <span className="invisible" aria-hidden="true">
+                {headlineBefore}<span>{headlineAccent}</span>{headlineAfter}
+              </span>
+              <span className="absolute inset-0" aria-hidden="true">
+                {beforeText}<span className="text-brand-orange">{accentText}</span>{afterText}
+                {!typingComplete && (
+                  <span className="ml-1 inline-block h-[0.86em] w-[2px] animate-pulse bg-white/90 align-[-0.08em]" />
+                )}
+              </span>
             </h1>
+
             <p className="mt-3 max-w-xl text-sm leading-6 text-zinc-200/90">
               Welcome back, {user?.name ?? 'Manager'}. Focus today on replacement risk, overdue inspections and stale mileage.
             </p>
