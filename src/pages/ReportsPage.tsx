@@ -1,3 +1,39 @@
-import { BarChart3, Download, TrendingUp } from 'lucide-react';
+import { BarChart3, Download, FileText, Search } from 'lucide-react';
 import { PageHeader } from '../components/ui/PageHeader';
-export default function ReportsPage(){return <div className="space-y-6"><PageHeader eyebrow="Business intelligence" title="Reports & analytics" description="Understand tyre health, customer retention and workshop performance." action={<button className="inline-flex h-10 items-center gap-2 rounded-xl border border-brand-line bg-white px-4 text-sm font-semibold"><Download size={16}/>Export report</button>}/><div className="grid gap-4 md:grid-cols-3">{[['Repeat customer rate','68%','+6.4% vs last month'],['Reminder conversion','31%','Bookings from reminders'],['Average tyre mileage','42,810 km','Before recorded replacement']].map(([label,value,note])=><div key={label} className="rounded-2xl border border-brand-line bg-white p-5 shadow-soft"><TrendingUp size={20} className="text-brand-orange"/><p className="mt-4 text-3xl font-bold">{value}</p><p className="mt-1 text-sm font-semibold">{label}</p><p className="mt-1 text-xs text-brand-muted">{note}</p></div>)}</div><div className="rounded-2xl border border-brand-line bg-white p-5 shadow-soft"><div className="flex items-center justify-between"><div><h2 className="font-bold">Tyre health distribution</h2><p className="mt-1 text-xs text-brand-muted">Current active tyres by latest recorded condition</p></div><BarChart3 size={20} className="text-brand-orange"/></div><div className="mt-8 space-y-5">{[['Good',73,'bg-green-500'],['Attention',19,'bg-amber-500'],['Critical',6,'bg-red-500'],['Unknown',2,'bg-zinc-400']].map(([label,value,color])=><div key={String(label)}><div className="mb-2 flex justify-between text-sm"><span className="font-semibold">{String(label)}</span><span className="text-brand-muted">{String(value)}%</span></div><div className="h-2.5 rounded-full bg-brand-canvas"><div className={`h-full rounded-full ${String(color)}`} style={{width:`${value}%`}}/></div></div>)}</div></div></div>}
+
+const reports = [
+  ['Tyre health distribution', 'Active tyres grouped by latest recorded condition', 'Tyre health', 'Updated today'],
+  ['Customer retention', 'Repeat visits, reminder response and return-to-branch activity', 'Customers', 'Updated today'],
+  ['Tyre replacement history', 'Mileage, age and tread at recorded replacement', 'Lifecycle', 'Updated yesterday'],
+  ['Workshop inspection activity', 'Completed inspections, technician activity and evidence capture', 'Operations', 'Updated today'],
+];
+
+export default function ReportsPage() {
+  return (
+    <div className="space-y-7">
+      <PageHeader eyebrow="Business intelligence" title="Reports & analytics" description="Open a specific report, apply a period or branch filter, then export the result." />
+
+      <section className="grid min-h-[560px] overflow-hidden rounded-[26px] bg-white ring-1 ring-black/[0.045] xl:grid-cols-[360px_1fr]">
+        <div className="border-b border-black/[0.05] xl:border-b-0 xl:border-r">
+          <div className="p-4"><div className="relative"><Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400"/><input placeholder="Find a report" className="h-11 w-full rounded-xl bg-[#F5F4F0] pl-10 pr-4 text-sm outline-none focus:bg-white focus:ring-2 focus:ring-orange-100"/></div></div>
+          <div className="divide-y divide-black/[0.045]">
+            {reports.map(([title, description, category, updated], index) => (
+              <button key={title} className={`w-full p-4 text-left transition hover:bg-[#FBFAF7] ${index===0?'bg-orange-50/40':''}`}>
+                <div className="flex gap-3"><div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#F0EFEB] text-zinc-700"><FileText size={16}/></div><div><p className="text-sm font-black text-brand-ink">{title}</p><p className="mt-1 text-[11px] leading-5 text-zinc-500">{description}</p><p className="mt-2 text-[10px] font-bold text-zinc-400">{category} · {updated}</p></div></div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col">
+          <div className="flex flex-col gap-4 border-b border-black/[0.05] p-5 sm:flex-row sm:items-end sm:justify-between sm:p-6"><div><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-zinc-400">Report preview</p><h2 className="mt-2 text-xl font-black text-brand-ink">Tyre health distribution</h2><p className="mt-1 text-xs text-zinc-500">Latest recorded condition across active tyres.</p></div><div className="flex gap-2"><select className="h-10 rounded-xl bg-[#F5F4F0] px-3 text-xs font-bold text-zinc-600 outline-none"><option>All branches</option></select><button className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#202124] px-3 text-xs font-bold text-white"><Download size={14}/>Export</button></div></div>
+          <div className="flex-1 p-5 sm:p-6">
+            <div className="flex items-center gap-2 text-sm font-black text-brand-ink"><BarChart3 size={17} className="text-brand-orange"/>Current condition breakdown</div>
+            <div className="mt-8 space-y-6">{[['Good',73,'bg-emerald-500'],['Attention',19,'bg-amber-500'],['Critical',6,'bg-red-500'],['Unknown',2,'bg-zinc-400']].map(([label,value,color])=><div key={String(label)}><div className="mb-2 flex items-center justify-between text-sm"><span className="font-bold text-brand-ink">{String(label)}</span><span className="font-semibold text-zinc-400">{String(value)}%</span></div><div className="h-3 overflow-hidden rounded-full bg-[#F0EFEB]"><div className={`h-full rounded-full ${String(color)}`} style={{width:`${value}%`}}/></div></div>)}</div>
+            <p className="mt-8 text-xs leading-6 text-zinc-500">This report is a focused analysis view. Summary KPIs remain on the main Dashboard rather than being repeated here.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
