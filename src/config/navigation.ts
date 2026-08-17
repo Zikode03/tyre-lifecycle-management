@@ -9,7 +9,7 @@ import {
   RadioTower,
   Settings,
   ShieldCheck,
-  TrendingDown,
+  Stethoscope,
   Users,
   type LucideIcon,
 } from 'lucide-react';
@@ -30,7 +30,7 @@ const allStaffRoles: StaffRole[] = ['system-admin', 'branch-manager', 'service-a
  */
 export const navigationItems: NavigationItem[] = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: allStaffRoles },
-  { label: 'Lifecycle Centre', path: '/lifecycle', icon: TrendingDown, roles: ['system-admin', 'branch-manager', 'service-advisor'] },
+  { label: 'Tyre Health Centre', path: '/lifecycle', icon: Stethoscope, roles: ['system-admin', 'branch-manager', 'service-advisor'] },
   { label: 'Customers', path: '/customers', icon: Users, roles: ['system-admin', 'branch-manager', 'service-advisor'] },
   { label: 'Vehicles', path: '/vehicles', icon: Car, roles: allStaffRoles },
   { label: 'Tyres', path: '/tyres', icon: Gauge, roles: allStaffRoles },
