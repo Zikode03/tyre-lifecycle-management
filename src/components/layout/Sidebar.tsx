@@ -16,49 +16,60 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const SettingsIcon = settingsNavigationItem.icon;
 
   return (
-    <aside className={`fixed inset-y-0 left-0 z-40 hidden border-r border-zinc-800 bg-brand-graphite text-white transition-all duration-300 lg:block ${collapsed ? 'w-[84px]' : 'w-[264px]'}`}>
-      <div className="flex h-full flex-col">
-        <div className={`flex h-20 items-center border-b border-white/10 ${collapsed ? 'justify-center px-3' : 'px-5'}`}>
+    <aside className={`fixed inset-y-0 left-0 z-40 hidden bg-[#191A1B] text-white transition-all duration-300 lg:block ${collapsed ? 'w-[88px]' : 'w-[248px]'}`}>
+      <div className="surface-grain flex h-full flex-col">
+        <div className={`flex h-[88px] items-center ${collapsed ? 'justify-center px-3' : 'px-5'}`}>
           <TyreTrackLogo light compact={collapsed} />
         </div>
 
-        <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-5">
+        {!collapsed && (
+          <div className="px-5 pb-3 pt-1">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600">Workspace</p>
+          </div>
+        )}
+
+        <nav className="flex-1 space-y-1 overflow-y-auto px-3 pb-5">
           {navItems.map(({ label, path, icon: Icon }) => (
             <NavLink
               key={path}
               to={path}
               title={collapsed ? label : undefined}
               className={({ isActive }) =>
-                `group flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                `group relative flex h-11 items-center rounded-xl px-3 text-sm transition ${
                   isActive
-                    ? 'bg-brand-orange text-white shadow-md shadow-orange-950/10'
-                    : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+                    ? 'bg-white/[0.075] font-semibold text-white'
+                    : 'font-medium text-zinc-500 hover:bg-white/[0.045] hover:text-zinc-200'
                 }`
               }
             >
-              <Icon size={19} className="shrink-0" />
-              {!collapsed && <span className="ml-3">{label}</span>}
+              {({ isActive }) => (
+                <>
+                  {isActive && <span className="absolute left-0 h-5 w-[3px] rounded-r-full bg-brand-orange" />}
+                  <Icon size={18} className={`shrink-0 ${isActive ? 'text-brand-orange' : 'text-zinc-600 group-hover:text-zinc-300'}`} />
+                  {!collapsed && <span className="ml-3">{label}</span>}
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
 
-        <div className="border-t border-white/10 p-3">
+        <div className="mx-3 mb-3 rounded-2xl bg-white/[0.035] p-2 ring-1 ring-white/[0.055]">
           {canViewSettings && (
             <NavLink
               to={settingsNavigationItem.path}
-              className={({ isActive }) => `flex items-center rounded-xl px-3 py-2.5 text-sm font-medium ${isActive ? 'bg-white/10 text-white' : 'text-zinc-400 hover:bg-white/5 hover:text-white'}`}
+              className={({ isActive }) => `flex h-10 items-center rounded-xl px-3 text-sm font-medium transition ${isActive ? 'bg-white/[0.08] text-white' : 'text-zinc-500 hover:bg-white/[0.04] hover:text-zinc-200'}`}
             >
-              <SettingsIcon size={19} />
+              <SettingsIcon size={18} />
               {!collapsed && <span className="ml-3">{settingsNavigationItem.label}</span>}
             </NavLink>
           )}
 
           <button
             onClick={onToggle}
-            className="mt-2 flex w-full items-center justify-center rounded-xl border border-white/10 py-2 text-zinc-400 transition hover:bg-white/5 hover:text-white"
+            className="mt-1 flex h-9 w-full items-center justify-center rounded-xl text-zinc-600 transition hover:bg-white/[0.04] hover:text-white"
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
-            {collapsed ? <ChevronRight size={17} /> : <ChevronLeft size={17} />}
+            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           </button>
         </div>
       </div>
