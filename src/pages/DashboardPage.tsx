@@ -12,7 +12,6 @@ import {
   Users,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { getDemoStaffSession } from '../auth/demoAuth';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { recentActivity, tyres } from '../data/mock';
 
@@ -31,7 +30,6 @@ const headlineAfter = ' of the next problem.';
 const headline = `${headlineBefore}${headlineAccent}${headlineAfter}`;
 
 export default function DashboardPage() {
-  const user = getDemoStaffSession();
   const priorityTyres = tyres.filter((tyre) => tyre.status !== 'Good').slice(0, 4);
   const [typedCharacters, setTypedCharacters] = useState(0);
   const [typingComplete, setTypingComplete] = useState(false);
@@ -44,7 +42,6 @@ export default function DashboardPage() {
       return;
     }
 
-    // A short pause lets the dashboard settle after login before the headline begins.
     const startDelay = window.setTimeout(() => {
       const typingTimer = window.setInterval(() => {
         setTypedCharacters((current) => {
@@ -69,7 +66,6 @@ export default function DashboardPage() {
 
   return (
     <div className="mx-auto w-full max-w-[1500px] space-y-5 sm:space-y-6">
-      {/* Hero carries context and primary actions only. Operational metrics live below. */}
       <section className="relative isolate min-h-[310px] overflow-hidden rounded-[24px] text-white shadow-[0_18px_45px_rgba(24,24,27,0.10)] sm:min-h-[330px] sm:rounded-[28px]">
         <img
           src="https://unsplash.com/photos/WHPOFFzY9gU/download?force=true&w=1800"
@@ -89,7 +85,6 @@ export default function DashboardPage() {
               <span className="text-xs font-medium text-zinc-200/85">Monday operations</span>
             </div>
 
-            {/* Invisible copy reserves the final wrapping/height so typing never shifts the hero content. */}
             <h1
               className="relative mt-5 max-w-2xl text-[32px] font-extrabold leading-[1.06] tracking-[-0.04em] text-white sm:text-[40px] lg:text-[44px]"
               aria-label={headline}
@@ -105,10 +100,6 @@ export default function DashboardPage() {
               </span>
             </h1>
 
-            <p className="mt-3 max-w-xl text-sm leading-6 text-zinc-200/90">
-              Welcome back, {user?.name ?? 'Manager'}. Focus today on replacement risk, overdue inspections and stale mileage.
-            </p>
-
             <div className="mt-5 flex flex-wrap gap-2.5">
               <Link to="/tyres" className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-orange px-3.5 text-sm font-bold text-white shadow-md transition hover:bg-brand-orange-dark">
                 <Plus size={15} /> Register tyre
@@ -121,7 +112,6 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* Six balanced dashboard metrics: 3 columns x 2 rows on desktop. */}
       <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {summaryItems.map((item) => {
           const Icon = item.icon;
