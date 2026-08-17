@@ -18,6 +18,37 @@ body { margin: 0; min-width: 320px; min-height: 100vh; background: #F2F1ED; font
 button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
 
+/* Keep all tabular screens on the same vertical rhythm. */
+table th,
+table td { vertical-align: middle; }
+
+/* Shared alignment helpers for non-table registry/work-queue rows. */
+.record-cell {
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.record-label {
+  min-height: 18px;
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  font-weight: 500;
+  color: #A1A1AA;
+}
+
+.record-value {
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+  margin-top: 0.125rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
 /* Manrope is naturally confident, so very heavy utility weights are softened globally. */
 .font-black { font-weight: 800; }
 
@@ -36,7 +67,6 @@ button { cursor: pointer; }
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent 92%);
 }
 
-/* Lightweight grain gives dark automotive surfaces depth without using imagery. */
 .surface-grain {
   background-image: radial-gradient(rgba(255,255,255,0.045) 0.7px, transparent 0.7px);
   background-size: 10px 10px;
