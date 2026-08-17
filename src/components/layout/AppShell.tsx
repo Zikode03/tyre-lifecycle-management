@@ -22,14 +22,13 @@ export function AppShell() {
   }
 
   return (
-    <div className="min-h-screen bg-brand-canvas">
+    <div className="min-h-screen bg-[#F2F1ED]">
       <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((value) => !value)} />
-
       <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
 
-      <div className={`transition-[margin] duration-300 ${collapsed ? 'lg:ml-[84px]' : 'lg:ml-[264px]'}`}>
+      <div className={`transition-[margin] duration-300 ${collapsed ? 'lg:ml-[88px]' : 'lg:ml-[248px]'}`}>
         <Topbar onOpenMobileMenu={() => setMobileOpen(true)} />
-        <main className="mx-auto max-w-[1600px] p-4 sm:p-6 lg:p-8">
+        <main className="mx-auto max-w-[1680px] px-4 pb-12 pt-6 sm:px-6 lg:px-9 lg:pt-8">
           <Outlet />
         </main>
       </div>
