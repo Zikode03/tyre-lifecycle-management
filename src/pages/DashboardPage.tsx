@@ -79,7 +79,7 @@ export default function DashboardPage() {
               <span className="absolute inset-0" aria-hidden="true">{beforeText}<span className="text-brand-orange">{accentText}</span>{afterText}{!typingComplete && <span className="ml-1 inline-block h-[0.86em] w-[2px] animate-pulse bg-white/90 align-[-0.08em]" />}</span>
             </h1>
             <div className="mt-5 flex flex-wrap gap-2.5">
-              <Link to="/tyres" className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-orange px-3.5 text-sm font-bold text-white shadow-md transition hover:bg-brand-orange-dark"><Plus size={15} /> Register tyre</Link>
+              <Link to="/tyres/fitment/new" className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-orange px-3.5 text-sm font-bold text-white shadow-md transition hover:bg-brand-orange-dark"><Plus size={15} /> Register tyre</Link>
               <Link to="/lifecycle" className="inline-flex h-10 items-center gap-2 rounded-xl bg-white/12 px-3.5 text-sm font-semibold text-white ring-1 ring-white/20 backdrop-blur-md transition hover:bg-white/18">Tyre Health Centre <ArrowRight size={15} /></Link>
             </div>
           </div>
