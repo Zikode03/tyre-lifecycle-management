@@ -15,6 +15,7 @@ import ReportsPage from './pages/ReportsPage';
 import TyrePassportPage from './pages/TyrePassportPage';
 import TyresPage from './pages/TyresPage';
 import VehiclesPage from './pages/VehiclesPage';
+import WarrantyPage from './pages/WarrantyPage';
 
 export default function App() {
   return (
@@ -34,7 +35,7 @@ export default function App() {
         <Route path="/tyres/:tyreId" element={<TyrePassportPage />} />
         <Route path="/inspections" element={<InspectionsPage />} />
         <Route path="/bookings" element={<BookingsPage />} />
-        <Route path="/warranty" element={<GenericPage title="Warranty management" description="Review tyre warranty coverage, evidence, claims and manufacturer decisions." />} />
+        <Route path="/warranty" element={<WarrantyPage />} />
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/reports" element={<ReportsPage />} />
         <Route path="/integrations" element={<IntegrationsPage />} />
