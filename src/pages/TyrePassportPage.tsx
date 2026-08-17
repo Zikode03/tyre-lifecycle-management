@@ -33,19 +33,24 @@ export default function TyrePassportPage() {
 
   return (
     <div className="space-y-6">
-      <Link to="/tyres" className="inline-flex items-center gap-2 text-sm font-semibold text-brand-muted hover:text-brand-ink">
-        <ArrowLeft size={16} /> Back to tyres
-      </Link>
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        <Link to="/tyres" className="inline-flex items-center gap-2 font-semibold text-zinc-500 hover:text-brand-ink">
+          <ArrowLeft size={16} /> Tyres
+        </Link>
+        <span className="text-zinc-300">/</span>
+        <span className="font-semibold text-brand-ink">{tyre.reference}</span>
+      </div>
 
       <section className="rounded-3xl bg-brand-graphite p-6 text-white shadow-soft sm:p-8">
         <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
           <div>
-            <div className="flex items-center gap-3">
-              <span className="rounded-lg bg-brand-orange px-2.5 py-1 text-xs font-bold">DIGITAL TYRE PASSPORT</span>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="rounded-lg bg-brand-orange px-2.5 py-1 text-xs font-bold">TYRE PASSPORT</span>
               <StatusBadge status={tyre.status} />
             </div>
             <h1 className="mt-5 text-3xl font-bold tracking-tight">{tyre.brand} {tyre.model}</h1>
             <p className="mt-2 text-sm text-zinc-400">{tyre.size} · {tyre.reference}</p>
+            <p className="mt-3 max-w-2xl text-xs leading-5 text-zinc-500">This passport is the complete detail record for this tyre inside the Tyres module.</p>
           </div>
           <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white text-brand-graphite"><QrCode size={42} /></div>
         </div>
@@ -96,7 +101,7 @@ export default function TyrePassportPage() {
             <p className="mt-1 text-xs leading-5 text-brand-muted">Inspect tread again, confirm alignment condition and prepare the customer for replacement if wear continues at the current rate.</p>
           </div>
           <Link to="/lifecycle" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-orange hover:text-brand-orange-dark">
-            View lifecycle centre
+            Open Tyre Health Centre
           </Link>
         </div>
       </section>
