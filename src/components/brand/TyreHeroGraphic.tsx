@@ -4,9 +4,9 @@
  * This is intentionally built from SVG/CSS rather than a stock image so the
  * login screen has a recognisable visual language unique to TyreTrack Pro.
  */
-export function TyreHeroGraphic() {
+export function TyreHeroGraphic({ compact = false, showCards = true, animate = true }: { compact?: boolean; showCards?: boolean; animate?: boolean }) {
   return (
-    <div className="relative mx-auto flex h-[420px] w-full max-w-[560px] items-center justify-center" aria-hidden="true">
+    <div className={`relative mx-auto flex w-full items-center justify-center ${compact ? 'h-[190px] max-w-[250px]' : 'h-[420px] max-w-[560px]'}`} aria-hidden="true">
       <style>{`
         .tyre-roll-in {
           transform-box: fill-box;
@@ -18,12 +18,8 @@ export function TyreHeroGraphic() {
           transform-origin: center;
           animation: tyreShadowIn 1.45s cubic-bezier(.22,.86,.3,1) both;
         }
-        .tyre-data-card-left {
-          animation: tyreCardIn .48s ease-out 1.05s both;
-        }
-        .tyre-data-card-right {
-          animation: tyreCardIn .48s ease-out 1.18s both;
-        }
+        .tyre-data-card-left { animation: tyreCardIn .48s ease-out 1.05s both; }
+        .tyre-data-card-right { animation: tyreCardIn .48s ease-out 1.18s both; }
         @keyframes tyreRollIn {
           0% { transform: translateX(180px) rotate(235deg); opacity: 0; }
           58% { transform: translateX(-14px) rotate(-18deg); opacity: 1; }
@@ -41,19 +37,16 @@ export function TyreHeroGraphic() {
           100% { opacity: 1; transform: translateY(0); }
         }
         @media (prefers-reduced-motion: reduce) {
-          .tyre-roll-in,
-          .tyre-ground-shadow,
-          .tyre-data-card-left,
-          .tyre-data-card-right {
-            animation: none !important;
-          }
+          .tyre-roll-in,.tyre-ground-shadow,.tyre-data-card-left,.tyre-data-card-right { animation: none !important; }
         }
       `}</style>
 
-      <div className="absolute left-1/2 top-1/2 h-[330px] w-[330px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-orange/10 blur-3xl" />
-      <div className="absolute left-[13%] top-[24%] h-2 w-2 rounded-full bg-brand-orange shadow-[0_0_20px_rgba(249,115,22,0.95)]" />
-      <div className="absolute right-[16%] top-[18%] h-1.5 w-1.5 rounded-full bg-orange-300/70" />
-      <div className="absolute bottom-[24%] right-[12%] h-2.5 w-2.5 rounded-full bg-brand-orange/80 shadow-[0_0_22px_rgba(249,115,22,0.65)]" />
+      <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-orange/10 blur-3xl ${compact ? 'h-[155px] w-[155px]' : 'h-[330px] w-[330px]'}`} />
+      {!compact && <>
+        <div className="absolute left-[13%] top-[24%] h-2 w-2 rounded-full bg-brand-orange shadow-[0_0_20px_rgba(249,115,22,0.95)]" />
+        <div className="absolute right-[16%] top-[18%] h-1.5 w-1.5 rounded-full bg-orange-300/70" />
+        <div className="absolute bottom-[24%] right-[12%] h-2.5 w-2.5 rounded-full bg-brand-orange/80 shadow-[0_0_22px_rgba(249,115,22,0.65)]" />
+      </>}
 
       <svg viewBox="0 0 560 420" className="relative z-10 h-full w-full overflow-visible">
         <defs>
@@ -61,10 +54,6 @@ export function TyreHeroGraphic() {
             <stop stopColor="#52525B" />
             <stop offset="0.42" stopColor="#27272A" />
             <stop offset="1" stopColor="#09090B" />
-          </linearGradient>
-          <linearGradient id="hero-sidewall" x1="170" y1="80" x2="376" y2="346" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#3F3F46" />
-            <stop offset="1" stopColor="#18181B" />
           </linearGradient>
           <radialGradient id="hero-hub" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(280 210) rotate(90) scale(96)">
             <stop stopColor="#3F3F46" />
@@ -75,9 +64,9 @@ export function TyreHeroGraphic() {
           </filter>
         </defs>
 
-        <ellipse className="tyre-ground-shadow" cx="280" cy="347" rx="154" ry="24" fill="#000" opacity="0.34" />
+        <ellipse className={animate ? 'tyre-ground-shadow' : undefined} cx="280" cy="347" rx="154" ry="24" fill="#000" opacity="0.34" />
 
-        <g className="tyre-roll-in">
+        <g className={animate ? 'tyre-roll-in' : undefined}>
           <g filter="url(#tyre-shadow)" transform="rotate(-10 280 210)">
             <ellipse cx="280" cy="210" rx="151" ry="151" fill="url(#hero-rubber)" />
             <ellipse cx="280" cy="210" rx="116" ry="116" fill="#101012" />
@@ -108,21 +97,23 @@ export function TyreHeroGraphic() {
           </g>
         </g>
 
-        <g className="tyre-data-card-left" transform="translate(34 85)">
-          <rect width="146" height="58" rx="16" fill="#27272A" stroke="#3F3F46" />
-          <circle cx="27" cy="29" r="11" fill="#F97316" fillOpacity="0.16" />
-          <path d="M22 29h10M27 24v10" stroke="#F97316" strokeWidth="2" strokeLinecap="round" />
-          <text x="48" y="25" fill="#FAFAFA" fontSize="12" fontWeight="700">Tread health</text>
-          <text x="48" y="42" fill="#A1A1AA" fontSize="10">6.2 mm verified</text>
-        </g>
+        {showCards && <>
+          <g className={animate ? 'tyre-data-card-left' : undefined} transform="translate(34 85)">
+            <rect width="146" height="58" rx="16" fill="#27272A" stroke="#3F3F46" />
+            <circle cx="27" cy="29" r="11" fill="#F97316" fillOpacity="0.16" />
+            <path d="M22 29h10M27 24v10" stroke="#F97316" strokeWidth="2" strokeLinecap="round" />
+            <text x="48" y="25" fill="#FAFAFA" fontSize="12" fontWeight="700">Tread health</text>
+            <text x="48" y="42" fill="#A1A1AA" fontSize="10">6.2 mm verified</text>
+          </g>
 
-        <g className="tyre-data-card-right" transform="translate(372 268)">
-          <rect width="158" height="62" rx="16" fill="#27272A" stroke="#3F3F46" />
-          <circle cx="29" cy="31" r="12" fill="#F97316" fillOpacity="0.16" />
-          <path d="M24 31h10" stroke="#F97316" strokeWidth="2" strokeLinecap="round" />
-          <text x="51" y="27" fill="#FAFAFA" fontSize="12" fontWeight="700">Next rotation</text>
-          <text x="51" y="45" fill="#A1A1AA" fontSize="10">1,850 km remaining</text>
-        </g>
+          <g className={animate ? 'tyre-data-card-right' : undefined} transform="translate(372 268)">
+            <rect width="158" height="62" rx="16" fill="#27272A" stroke="#3F3F46" />
+            <circle cx="29" cy="31" r="12" fill="#F97316" fillOpacity="0.16" />
+            <path d="M24 31h10" stroke="#F97316" strokeWidth="2" strokeLinecap="round" />
+            <text x="51" y="27" fill="#FAFAFA" fontSize="12" fontWeight="700">Next rotation</text>
+            <text x="51" y="45" fill="#A1A1AA" fontSize="10">1,850 km remaining</text>
+          </g>
+        </>}
       </svg>
     </div>
   );
