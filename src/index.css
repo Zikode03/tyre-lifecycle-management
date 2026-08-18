@@ -18,9 +18,97 @@ body { margin: 0; min-width: 320px; min-height: 100vh; background: #F2F1ED; font
 button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
 
-/* Keep all tabular screens on the same vertical rhythm. */
-table th,
-table td { vertical-align: middle; }
+/*
+ * Shared TyreTrack table system.
+ * Any real <table> inside the application automatically inherits this look,
+ * so new modules cannot slowly drift into a different table design.
+ */
+main table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #FFFFFF;
+  color: #202124;
+  text-align: left;
+}
+
+main table th,
+main table td {
+  vertical-align: middle;
+}
+
+main table thead tr {
+  background: #202124 !important;
+  color: #D4D4D8 !important;
+}
+
+main table thead th {
+  padding: 0.875rem 1rem !important;
+  font-size: 0.625rem !important;
+  line-height: 1rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: #D4D4D8 !important;
+  white-space: nowrap;
+}
+
+main table tbody tr {
+  background: #FFFFFF;
+  transition: background-color 160ms ease, box-shadow 160ms ease;
+}
+
+main table tbody tr + tr td {
+  border-top: 1px solid rgba(24, 24, 27, 0.055);
+}
+
+main table tbody tr:hover {
+  background: #FAF9F6 !important;
+}
+
+main table tbody td {
+  padding: 0.95rem 1rem !important;
+  font-size: 0.8125rem;
+  line-height: 1.35rem;
+}
+
+main table tbody td:first-child,
+main table thead th:first-child {
+  padding-left: 1.25rem !important;
+}
+
+main table tbody td:last-child,
+main table thead th:last-child {
+  padding-right: 1.25rem !important;
+}
+
+main table tbody a {
+  font-weight: 700;
+  color: #F97316;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+main table tbody a:hover {
+  color: #C2410C;
+}
+
+main table tbody tr:focus-visible {
+  background: rgba(255, 247, 237, 0.75) !important;
+  outline: 2px solid rgba(249, 115, 22, 0.28);
+  outline-offset: -2px;
+}
+
+@media (max-width: 1023px) {
+  main table thead th {
+    padding-left: 0.8rem !important;
+    padding-right: 0.8rem !important;
+  }
+
+  main table tbody td {
+    padding-left: 0.8rem !important;
+    padding-right: 0.8rem !important;
+  }
+}
 
 /* Shared alignment helpers for non-table registry/work-queue rows. */
 .record-cell {
