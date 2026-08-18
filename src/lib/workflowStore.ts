@@ -1,14 +1,32 @@
 export type DemoCustomer = { id:string; name:string; mobile:string; email:string; status:'Active'|'Inactive' };
 export type DemoVehicle = { id:string; customerId:string; registration:string; make:string; model:string; year:number; mileage:number; status:'Active'|'Inactive' };
 export type DemoBooking = { id:string; bookingNumber?:number; customer:string; registration:string; service:string; date:string; time:string; status:'Confirmed'|'Checked in'|'Pending'|'Cancelled'|'Completed' };
-export type DemoInspection = { id:string; registration:string; customer:string; technician:string; status:'Booked'|'In progress'|'Awaiting technician'|'Completed'; odometer?:number; position?:string; inner?:number; centre?:number; outer?:number; pressure?:number; wearPattern?:string; defects?:string[]; notes?:string; recommendation?:string };
+export type DemoInspection = { id:string; registration:string; customer:string; technician:string; status:'Booked'|'In progress'|'Awaiting technician'|'Completed'; tyreId?:string; odometer?:number; position?:string; inner?:number; centre?:number; outer?:number; pressure?:number; wearPattern?:string; defects?:string[]; notes?:string; recommendation?:string };
 export type DemoWarrantyClaim = { id:string; tyreId:string; issue:string; type:string; status:string; eligibility:string; supplier:string; notes?:string };
+export type DemoTyreScan = {
+  id:string;
+  tyreId:string;
+  inspectionId:string;
+  registration:string;
+  position:string;
+  capturedAt:string;
+  source:'Phone camera';
+  analysisMode:'Prototype AI analysis';
+  fileName:string;
+  estimatedTreadMm?:number;
+  wearPattern:'Even'|'Inner-edge wear'|'Outer-edge wear'|'Centre wear'|'Cupping'|'Unknown';
+  defects:string[];
+  confidence:number;
+  verification:'Pending technician review'|'Technician confirmed';
+  recommendation:string;
+};
 
 const CUSTOMER_KEY='tyretrack.demo.customers';
 const VEHICLE_KEY='tyretrack.demo.vehicles';
 const BOOKING_KEY='tyretrack.demo.bookings';
 const INSPECTION_KEY='tyretrack.demo.inspections';
 const WARRANTY_KEY='tyretrack.demo.warranty';
+const TYRE_SCAN_KEY='tyretrack.demo.tyreScans';
 
 const seedCustomers:DemoCustomer[]=[
   {id:'CUS-1001',name:'Thando Mkhize',mobile:'082 555 0134',email:'thando@example.com',status:'Active'},
@@ -37,6 +55,7 @@ const seedWarranty:DemoWarrantyClaim[]=[
   {id:'WAR-2041',tyreId:'TYR-3004',issue:'Sidewall separation',type:'Manufacturer warranty',status:'Evidence review',eligibility:'Likely eligible',supplier:'Continental'},
   {id:'WAR-2038',tyreId:'TYR-3010',issue:'Pothole impact',type:'Road-hazard plan',status:'Awaiting supplier',eligibility:'Plan dependent',supplier:'Bridgestone'},
 ];
+const seedTyreScans:DemoTyreScan[]=[];
 
 function read<T>(key:string, seed:T):T{
   if(typeof window==='undefined') return seed;
@@ -65,4 +84,6 @@ export const workflowStore={
   saveInspections:(value:DemoInspection[])=>write(INSPECTION_KEY,value),
   warranty:()=>read(WARRANTY_KEY,seedWarranty),
   saveWarranty:(value:DemoWarrantyClaim[])=>write(WARRANTY_KEY,value),
+  tyreScans:()=>read(TYRE_SCAN_KEY,seedTyreScans),
+  saveTyreScans:(value:DemoTyreScan[])=>write(TYRE_SCAN_KEY,value),
 };
