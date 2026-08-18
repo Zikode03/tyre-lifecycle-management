@@ -15,6 +15,7 @@ import IntegrationsPage from './pages/IntegrationsPage';
 import JobCardsPage from './pages/JobCardsPage';
 import JobCardWorkspacePage from './pages/JobCardWorkspacePage';
 import LifecycleCentrePage from './pages/LifecycleCentrePage';
+import LifecycleOperationsPage from './pages/LifecycleOperationsPage';
 import LoginPage from './pages/LoginPage';
 import NotificationsPage from './pages/NotificationsPage';
 import ReportsPage from './pages/ReportsPage';
@@ -32,7 +33,7 @@ import WarrantyPage from './pages/WarrantyPage';
 export default function App(){return <Routes>
  <Route path="/" element={<Navigate to="/login" replace/>}/><Route path="/login" element={<LoginPage/>}/><Route path="/customer-access" element={<CustomerAccessPage/>}/><Route path="/customer-portal" element={<CustomerPortalPage/>}/>
  <Route element={<AppShell/>}>
-  <Route path="/dashboard" element={<DashboardPage/>}/><Route path="/lifecycle" element={<LifecycleCentrePage/>}/>
+  <Route path="/dashboard" element={<DashboardPage/>}/><Route path="/lifecycle" element={<LifecycleCentrePage/>}/><Route path="/lifecycle-operations" element={<LifecycleOperationsPage/>}/>
   <Route path="/customers" element={<CustomersPage/>}/><Route path="/customers/:customerId" element={<CustomerWorkspacePage/>}/>
   <Route path="/vehicles" element={<VehiclesPage/>}/><Route path="/vehicles/:vehicleId" element={<VehicleWorkspacePage/>}/>
   <Route path="/tyres" element={<TyresPage/>}/><Route path="/tyres/fitment/new" element={<TyreFitmentPage/>}/><Route path="/tyres/:tyreId" element={<TyrePassportPage/>}/>
