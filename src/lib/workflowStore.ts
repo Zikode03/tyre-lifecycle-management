@@ -15,6 +15,14 @@ export type DemoTpmsReading={id:string;registration:string;position:string;press
 export type DemoDevice={id:string;name:string;type:'TPMS reader'|'Digital tread gauge'|'Pressure gauge'|'Drive-over scanner'|'Alignment machine';branchId:string;status:'Connected'|'Offline'|'Attention';lastSync:string};
 export type DemoBranch={id:string;name:string;region:string;vehicles:number;workshopBays:number;status:'Active'|'Attention'};
 export type DemoFleet={id:string;name:string;branchId:string;vehicles:number;criticalTyres:number;attentionTyres:number;manager:string};
+export type JobCardStatus='Draft'|'Quote sent'|'Approved'|'Declined'|'In workshop'|'Completed'|'Cancelled';
+export type QuoteDecision='Pending'|'Approved'|'Declined';
+export type DemoJobCardItem={id:string;type:'Tyre replacement'|'Alignment'|'Balancing'|'Rotation'|'Puncture repair'|'Inspection';description:string;position?:string;sku?:string;quantity:number;unitPrice:number;approved:boolean};
+export type DemoJobCard={
+ id:string;registration:string;customer:string;branch:string;inspectionIds:string[];createdAt:string;status:JobCardStatus;
+ quoteNumber:string;quoteDecision:QuoteDecision;quoteSentAt?:string;decisionAt?:string;customerNote?:string;
+ items:DemoJobCardItem[];vatRate:number;technician?:string;workshopBay?:string;completedAt?:string;
+};
 
 const CUSTOMER_KEY='tyretrack.demo.customers';
 const VEHICLE_KEY='tyretrack.demo.vehicles';
@@ -26,6 +34,7 @@ const TPMS_KEY='tyretrack.demo.tpms';
 const DEVICE_KEY='tyretrack.demo.devices';
 const BRANCH_KEY='tyretrack.demo.branches';
 const FLEET_KEY='tyretrack.demo.fleets';
+const JOB_CARD_KEY='tyretrack.demo.jobCards';
 
 const seedCustomers:DemoCustomer[]=[
   {id:'CUS-1001',name:'Thando Mkhize',mobile:'082 555 0134',email:'thando@example.com',status:'Active'},
@@ -77,11 +86,21 @@ const seedFleets:DemoFleet[]=[
  {id:'FLT-SALES',name:'Regional Sales Fleet',branchId:'BR-DBN',vehicles:240,criticalTyres:4,attentionTyres:28,manager:'P. Naidoo'},
  {id:'FLT-RETAIL',name:'Retail Customer Vehicles',branchId:'BR-PTN',vehicles:680,criticalTyres:12,attentionTyres:63,manager:'L. Mthembu'},
 ];
+const seedJobCards:DemoJobCard[]=[
+ {id:'JOB-4001',registration:'ND 452-981',customer:'Thando Mkhize',branch:'Durban Central',inspectionIds:['INS-1048'],createdAt:'2026-08-18T07:30:00Z',status:'Quote sent',quoteNumber:'QT-260818-001',quoteDecision:'Pending',quoteSentAt:'2026-08-18T07:42:00Z',vatRate:15,items:[
+  {id:'ITEM-1',type:'Tyre replacement',description:'Continental UltraContact 205/55 R16 - rear right replacement',position:'Rear Right',sku:'CON-UC-2055516',quantity:1,unitPrice:1850,approved:true},
+  {id:'ITEM-2',type:'Alignment',description:'Four-wheel alignment after uneven wear finding',quantity:1,unitPrice:650,approved:true},
+  {id:'ITEM-3',type:'Balancing',description:'Wheel balancing for replacement tyre',position:'Rear Right',quantity:1,unitPrice:180,approved:true},
+ ]},
+];
 
 function read<T>(key:string, seed:T):T{if(typeof window==='undefined') return seed;const value=window.localStorage.getItem(key);if(!value){window.localStorage.setItem(key,JSON.stringify(seed));return seed;}try{return JSON.parse(value) as T;}catch{return seed;}}
 function write<T>(key:string,value:T){if(typeof window!=='undefined') window.localStorage.setItem(key,JSON.stringify(value));return value;}
 export function getNextBookingNumber(bookings:DemoBooking[],date:string){const used=bookings.filter(item=>item.date===date).map(item=>item.bookingNumber??0);return Math.max(0,...used)+1;}
 export function formatBookingNumber(booking:DemoBooking){return `#${String(booking.bookingNumber??1).padStart(2,'0')}`;}
+export function jobCardSubtotal(card:DemoJobCard){return card.items.filter(i=>i.approved).reduce((sum,i)=>sum+i.quantity*i.unitPrice,0);}
+export function jobCardVat(card:DemoJobCard){return jobCardSubtotal(card)*(card.vatRate/100);}
+export function jobCardTotal(card:DemoJobCard){return jobCardSubtotal(card)+jobCardVat(card);}
 
 export const workflowStore={
  customers:()=>read(CUSTOMER_KEY,seedCustomers),saveCustomers:(v:DemoCustomer[])=>write(CUSTOMER_KEY,v),
@@ -94,4 +113,5 @@ export const workflowStore={
  devices:()=>read(DEVICE_KEY,seedDevices),saveDevices:(v:DemoDevice[])=>write(DEVICE_KEY,v),
  branches:()=>read(BRANCH_KEY,seedBranches),saveBranches:(v:DemoBranch[])=>write(BRANCH_KEY,v),
  fleets:()=>read(FLEET_KEY,seedFleets),saveFleets:(v:DemoFleet[])=>write(FLEET_KEY,v),
+ jobCards:()=>read(JOB_CARD_KEY,seedJobCards),saveJobCards:(v:DemoJobCard[])=>write(JOB_CARD_KEY,v),
 };
