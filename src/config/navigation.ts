@@ -1,6 +1,7 @@
 import {
   Activity,
   Bell,
+  BriefcaseBusiness,
   Building2,
   CalendarDays,
   Car,
@@ -27,6 +28,7 @@ export const navigationItems:NavigationItem[]=[
  {label:'Vehicles',path:'/vehicles',icon:Car,roles:allOperationalRoles},
  {label:'Tyres',path:'/tyres',icon:Gauge,roles:allOperationalRoles},
  {label:'Inspections',path:'/inspections',icon:ClipboardCheck,roles:allOperationalRoles},
+ {label:'Job Cards',path:'/job-cards',icon:BriefcaseBusiness,roles:['system-admin','branch-manager','service-advisor','technician']},
  {label:'Customer Scan Review',path:'/scan-review',icon:ScanLine,roles:['system-admin','branch-manager','service-advisor','technician']},
  {label:'Devices & TPMS',path:'/devices-tpms',icon:Wifi,roles:['system-admin','branch-manager','technician','fleet-manager']},
  {label:'Fleet & Branches',path:'/fleet',icon:Building2,roles:['system-admin','branch-manager','fleet-manager']},
@@ -41,6 +43,7 @@ export function getNavigationForRole(role:StaffRole){return navigationItems.filt
 export function canRoleAccessPath(role:StaffRole,pathname:string){
  if(pathname.startsWith('/tyres/')) return allOperationalRoles.includes(role);
  if(pathname.startsWith('/inspections/')) return allOperationalRoles.includes(role);
+ if(pathname.startsWith('/job-cards/')) return ['system-admin','branch-manager','service-advisor','technician'].includes(role);
  if(pathname===settingsNavigationItem.path) return settingsNavigationItem.roles.includes(role);
  const route=navigationItems.find(item=>item.path===pathname);return route?route.roles.includes(role):pathname==='/dashboard';
 }
