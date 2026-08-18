@@ -10,10 +10,10 @@ const headlineAfter = ' of the next problem.';
 const headline = `${headlineBefore}${headlineAccent}${headlineAfter}`;
 
 const summaryItems = [
-  { label: 'Active tyres', value: '1,284', note: 'Across 318 vehicles', icon: Gauge },
-  { label: 'Critical tyres', value: '12', note: '4 require action today', icon: ShieldAlert },
-  { label: 'Due for attention', value: '67', note: 'Inspection or rotation', icon: TriangleAlert },
-  { label: "Today's bookings", value: '18', note: '6 awaiting check-in', icon: CalendarDays },
+  { label: 'Active tyres', value: '1,284', note: 'Across 318 vehicles', icon: Gauge, card: 'from-[#202124] to-[#2B2C2F] text-white border-white/5', labelTone: 'text-zinc-400', noteTone: 'text-zinc-400', iconTone: 'bg-white/10 text-brand-orange ring-white/10', accent: 'bg-brand-orange' },
+  { label: 'Critical tyres', value: '12', note: '4 require action today', icon: ShieldAlert, card: 'from-[#FFF8F7] to-[#FFFDFD] text-brand-ink border-red-100', labelTone: 'text-red-500', noteTone: 'text-red-400', iconTone: 'bg-red-50 text-red-600 ring-red-100', accent: 'bg-red-500' },
+  { label: 'Due for attention', value: '67', note: 'Inspection or rotation', icon: TriangleAlert, card: 'from-[#FFF9EE] to-[#FFFDFC] text-brand-ink border-amber-100', labelTone: 'text-amber-700', noteTone: 'text-amber-600/70', iconTone: 'bg-amber-50 text-amber-700 ring-amber-100', accent: 'bg-amber-400' },
+  { label: "Today's bookings", value: '18', note: '6 awaiting check-in', icon: CalendarDays, card: 'from-[#FFF5ED] to-white text-brand-ink border-orange-100', labelTone: 'text-brand-orange', noteTone: 'text-zinc-400', iconTone: 'bg-orange-100 text-brand-orange ring-orange-200/70', accent: 'bg-brand-orange' },
 ];
 
 const bookings = [
@@ -105,14 +105,15 @@ export default function DashboardPage() {
         {summaryItems.map((item) => {
           const Icon = item.icon;
           return (
-            <div key={item.label} className="rounded-[20px] bg-white px-5 py-4 ring-1 ring-black/[0.045]">
+            <div key={item.label} className={`group relative overflow-hidden rounded-[20px] border bg-gradient-to-br px-5 py-4 shadow-[0_8px_24px_rgba(24,24,27,0.055)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_34px_rgba(24,24,27,0.09)] ${item.card}`}>
+              <span className={`absolute inset-x-0 top-0 h-[3px] ${item.accent}`} />
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs font-semibold text-zinc-400">{item.label}</p>
-                  <p className="mt-2 text-[28px] font-extrabold leading-none tracking-[-0.04em] text-brand-ink">{item.value}</p>
-                  <p className="mt-2 text-xs text-zinc-400">{item.note}</p>
+                  <p className={`text-[11px] font-extrabold uppercase tracking-[0.11em] ${item.labelTone}`}>{item.label}</p>
+                  <p className="mt-2 text-[30px] font-extrabold leading-none tracking-[-0.04em]">{item.value}</p>
+                  <p className={`mt-2 text-xs font-medium ${item.noteTone}`}>{item.note}</p>
                 </div>
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50 text-brand-orange"><Icon size={17} /></div>
+                <div className={`flex h-10 w-10 items-center justify-center rounded-[13px] ring-1 transition group-hover:scale-105 ${item.iconTone}`}><Icon size={18} strokeWidth={2.1} /></div>
               </div>
             </div>
           );
@@ -123,7 +124,7 @@ export default function DashboardPage() {
         <section className="overflow-hidden rounded-[24px] bg-white ring-1 ring-black/[0.045]">
           <div className="flex items-center justify-between border-b border-black/[0.05] px-5 py-4">
             <div>
-              <p className="text-xs font-semibold text-zinc-400">Priority queue</p>
+              <p className="text-xs font-semibold text-brand-orange">Priority queue</p>
               <h2 className="mt-1 text-lg font-extrabold text-brand-ink">Tyres requiring attention</h2>
             </div>
             <Link to="/lifecycle" className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-orange">View all <ArrowRight size={14} /></Link>
@@ -131,9 +132,9 @@ export default function DashboardPage() {
 
           <div className="divide-y divide-black/[0.05]">
             {priorityTyres.map((tyre) => (
-              <Link key={tyre.id} to={`/tyres/${tyre.id}`} className="grid gap-3 px-5 py-4 transition hover:bg-[#FAF9F6] md:grid-cols-[minmax(0,1.4fr)_160px_110px_150px] md:items-center">
+              <Link key={tyre.id} to={`/tyres/${tyre.id}`} className="grid gap-3 px-5 py-4 transition hover:bg-[#FFF8F2] md:grid-cols-[minmax(0,1.4fr)_160px_110px_150px] md:items-center">
                 <div className="flex min-w-0 items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3F2EE] text-zinc-600"><Gauge size={16} /></div>
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-brand-orange ring-1 ring-orange-100"><Gauge size={16} /></div>
                   <div className="min-w-0"><p className="truncate text-sm font-extrabold text-brand-ink">{tyre.brand} {tyre.model}</p><p className="mt-1 truncate text-xs text-zinc-400">{tyre.reference} · {tyre.position}</p></div>
                 </div>
                 <div><p className="text-xs text-zinc-400">Vehicle</p><p className="mt-1 truncate text-sm font-semibold text-zinc-700">{tyre.vehicle}</p></div>
@@ -145,20 +146,20 @@ export default function DashboardPage() {
         </section>
 
         <div className="grid content-start gap-5">
-          <section className="overflow-hidden rounded-[24px] bg-white ring-1 ring-black/[0.045]">
-            <div className="flex items-center justify-between border-b border-black/[0.05] px-5 py-4"><div><p className="text-xs font-semibold text-zinc-400">Workshop flow</p><h2 className="mt-1 text-lg font-extrabold text-brand-ink">Today’s bookings</h2></div><CalendarDays size={17} className="text-zinc-300" /></div>
-            <div className="divide-y divide-black/[0.05]">{bookings.map((booking) => <Link to="/bookings" key={booking.time} className="grid grid-cols-[62px_minmax(0,1fr)] gap-3 px-5 py-4 transition hover:bg-[#FAF9F6]"><div className="border-r border-black/[0.06] pr-3"><p className="text-sm font-extrabold text-brand-ink">{booking.time}</p><p className="mt-1 text-[10px] font-bold uppercase tracking-[0.08em] text-zinc-400">Today</p></div><div className="min-w-0"><p className="truncate text-sm font-semibold text-zinc-800">{booking.title}</p><p className="mt-1 truncate text-xs text-zinc-400">{booking.meta}</p></div></Link>)}</div>
+          <section className="overflow-hidden rounded-[24px] border border-orange-100/80 bg-gradient-to-br from-white to-[#FFF8F2] shadow-[0_8px_24px_rgba(234,112,35,0.06)]">
+            <div className="flex items-center justify-between border-b border-orange-100/80 px-5 py-4"><div><p className="text-xs font-semibold text-brand-orange">Workshop flow</p><h2 className="mt-1 text-lg font-extrabold text-brand-ink">Today’s bookings</h2></div><div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-100 text-brand-orange"><CalendarDays size={17} /></div></div>
+            <div className="divide-y divide-orange-100/70">{bookings.map((booking) => <Link to="/bookings" key={booking.time} className="grid grid-cols-[62px_minmax(0,1fr)] gap-3 px-5 py-4 transition hover:bg-orange-50/70"><div className="border-r border-orange-100 pr-3"><p className="text-sm font-extrabold text-brand-ink">{booking.time}</p><p className="mt-1 text-[10px] font-bold uppercase tracking-[0.08em] text-brand-orange">Today</p></div><div className="min-w-0"><p className="truncate text-sm font-semibold text-zinc-800">{booking.title}</p><p className="mt-1 truncate text-xs text-zinc-400">{booking.meta}</p></div></Link>)}</div>
           </section>
 
-          <section className="rounded-[24px] bg-white p-5 ring-1 ring-black/[0.045]">
-            <div className="flex items-start justify-between"><div><p className="text-xs font-semibold text-zinc-400">Live branch feed</p><h2 className="mt-1 text-lg font-extrabold text-brand-ink">Recent activity</h2></div><Activity size={17} className="text-zinc-300" /></div>
-            <div className="mt-4 space-y-4">{recentActivity.slice(0, 4).map((item) => <div key={item.title} className="flex gap-3"><span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${item.type === 'critical' ? 'bg-red-500' : item.type === 'reminder' ? 'bg-amber-400' : item.type === 'customer' ? 'bg-emerald-500' : 'bg-brand-orange'}`} /><div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-3"><p className="text-sm font-semibold leading-5 text-zinc-800">{item.title}</p><span className="shrink-0 text-[11px] text-zinc-400">{item.time}</span></div><p className="mt-1 text-xs leading-5 text-zinc-400">{item.meta}</p></div></div>)}</div>
+          <section className="rounded-[24px] border border-black/[0.05] bg-[#202124] p-5 text-white shadow-[0_12px_30px_rgba(24,24,27,0.10)]">
+            <div className="flex items-start justify-between"><div><p className="text-xs font-semibold text-orange-300">Live branch feed</p><h2 className="mt-1 text-lg font-extrabold text-white">Recent activity</h2></div><div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.07] text-brand-orange ring-1 ring-white/10"><Activity size={17} /></div></div>
+            <div className="mt-4 space-y-4">{recentActivity.slice(0, 4).map((item) => <div key={item.title} className="flex gap-3"><span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${item.type === 'critical' ? 'bg-red-500' : item.type === 'reminder' ? 'bg-amber-400' : item.type === 'customer' ? 'bg-emerald-500' : 'bg-brand-orange'}`} /><div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-3"><p className="text-sm font-semibold leading-5 text-zinc-100">{item.title}</p><span className="shrink-0 text-[11px] text-zinc-500">{item.time}</span></div><p className="mt-1 text-xs leading-5 text-zinc-500">{item.meta}</p></div></div>)}</div>
           </section>
         </div>
       </div>
 
-      <section className="flex flex-col gap-4 rounded-[22px] bg-[#F0EEE8] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-brand-orange ring-1 ring-black/[0.04]"><Users size={17} /></div><div><p className="text-sm font-extrabold text-brand-ink">842 active customers</p><p className="mt-1 text-xs text-zinc-500">Customer records, vehicles and tyre history remain connected.</p></div></div>
+      <section className="flex flex-col gap-4 rounded-[22px] border border-orange-100 bg-gradient-to-r from-[#FFF5ED] via-[#FFF9F4] to-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-orange text-white shadow-sm"><Users size={17} /></div><div><p className="text-sm font-extrabold text-brand-ink">842 active customers</p><p className="mt-1 text-xs text-zinc-500">Customer records, vehicles and tyre history remain connected.</p></div></div>
         <Link to="/customers" className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-orange">Open customers <ArrowRight size={15} /></Link>
       </section>
     </div>
