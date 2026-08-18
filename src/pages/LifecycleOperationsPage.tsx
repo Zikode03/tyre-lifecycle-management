@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { AlertTriangle, ArrowRightLeft, ClipboardList, History, PackageOpen, Recycle, RefreshCw, RotateCw, Search, Truck } from 'lucide-react';
+import { useState } from 'react';
+import { AlertTriangle, ArrowRightLeft, History, Recycle, RefreshCw, RotateCw } from 'lucide-react';
 import { PageHeader } from '../components/ui/PageHeader';
 import { addAudit, lifecycleStore, recordRemoval, recordRotation, syncOfflineDrafts, type RecallCampaign, type SupplierOrder } from '../lib/lifecycleOperations';
 import { workflowStore } from '../lib/workflowStore';
@@ -8,7 +8,7 @@ type Tab='Rotation'|'End of life'|'Recalls'|'Purchasing'|'Audit'|'Offline sync';
 const tabs:Tab[]=['Rotation','End of life','Recalls','Purchasing','Audit','Offline sync'];
 const input='h-11 w-full rounded-xl border border-black/[0.07] bg-white px-3 text-sm outline-none focus:border-orange-300';
 export default function LifecycleOperationsPage(){
- const [tab,setTab]=useState<Tab>('Rotation');const [version,setVersion]=useState(0);const vehicles=workflowStore.vehicles();const [registration,setRegistration]=useState(vehicles[0]?.registration??'');const [odometer,setOdometer]=useState(vehicles[0]?.mileage??0);const [reason,setReason]=useState('Worn below service threshold');const [destination,setDestination]=useState('Recycling');const [position,setPosition]=useState('Rear Right');const [tyreId,setTyreId]=useState('TYR-3004');const [message,setMessage]=useState('');const refresh=(msg:string)=>{setVersion(v=>v+1);setMessage(msg);setTimeout(()=>setMessage(''),2400)};
+ const [tab,setTab]=useState<Tab>('Rotation');const [,setVersion]=useState(0);const vehicles=workflowStore.vehicles();const [registration,setRegistration]=useState(vehicles[0]?.registration??'');const [odometer,setOdometer]=useState(vehicles[0]?.mileage??0);const [reason,setReason]=useState('Worn below service threshold');const [destination,setDestination]=useState('Recycling');const [position,setPosition]=useState('Rear Right');const [tyreId,setTyreId]=useState('TYR-3004');const [message,setMessage]=useState('');const refresh=(msg:string)=>{setVersion(v=>v+1);setMessage(msg);setTimeout(()=>setMessage(''),2400)};
  const events=lifecycleStore.events(),recalls=lifecycleStore.recalls(),orders=lifecycleStore.orders(),audit=lifecycleStore.audit(),offline=lifecycleStore.offlineDrafts();
  const doRotation=()=>{recordRotation(registration,[{tyreId:'TYR-FL',from:'Front Left',to:'Rear Left'},{tyreId:'TYR-FR',from:'Front Right',to:'Rear Right'},{tyreId:'TYR-RL',from:'Rear Left',to:'Front Left'},{tyreId:'TYR-RR',from:'Rear Right',to:'Front Right'}],odometer);refresh('Rotation event recorded without losing tyre history.')};
  const doRemoval=()=>{recordRemoval({tyreId,registration,position,reason,destination,odometer});refresh('Tyre removal and destination recorded.')};
